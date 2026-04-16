@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    :root {
+      /* Colorful Retro Theme */
+      --bg: #050510;
+      --surface: #0f0f1a;
+      --border: #2a2a40;
+      --text: #e0e0ff;
+      --text-dim: #8888aa;
+
+      --accent: #d946ef;
+      /* Magenta/Purple */
+      --accent-glow: rgba(217, 70, 239, 0.4);
+
+      --secondary: #3b82f6;
+      /* Cyber Blue */
+
+      --success: #4ade80;
+      /* Neon Green */
+      --danger: #ef4444;
+      /* Neon Red */
+      --warning: #fbbf24;
+      /* Neon Amber */
+
+      --font-mono: 'Courier New', Courier, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+    }
+
+    /* Animated Main Background with Noise */
+    body {
+      width: 380px;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-mono);
+      margin: 0;
+      padding: 15px;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Moving Scanlines */
+    body::before {
+      content: " ";
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      right: 0;
+      background: linear-gradient(to bottom,
+          rgba(255, 255, 255, 0),
+          rgba(255, 255, 255, 0) 50%,
+          rgba(0, 0, 0, 0.2) 50%,
+          rgba(0, 0, 0, 0.2));
+      background-size: 100% 4px;
+      z-index: 2;
+      pointer-events: none;
+      animation: scanlines 0.2s linear infinite;
+      opacity: 0.6;
+    }
+
+    @keyframes scanlines {
+      0% {
+        background-position: 0 0;
+      }
+
+      100% {
+        background-position: 0 4px;
+      }
+    }
+
+    /* Subtle Static Noise Background */
+    .static-noise {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.4;
+      animation: noise-anim 0.5s steps(5) infinite;
+    }
+
+    @keyframes noise-anim {
+
+      0%,
+      100% {
+        transform: translate(0, 0);
+      }
+
+      10% {
+        transform: translate(-5%, -5%);
+      }
+
+      20% {
+        transform: translate(-10%, 5%);
+      }
+
+      30% {
+        transform: translate(5%, -10%);
+      }
+
+      40% {
+        transform: translate(-5%, 15%);
+      }
+
+      50% {
+        transform: translate(-10%, 5%);
+      }
+
+      60% {
+        transform: translate(15%, 0);
+      }
+
+      70% {
+        transform: translate(0, 10%);
+      }
+
+      80% {
+        transform: translate(-15%, 0);
+      }
+
+      90% {
+        transform: translate(10%, 5%);
+      }
+    }
+
+    /* Intense CRT Flicker */
+    @keyframes flicker {
+      0% {
+        opacity: 0.99;
+      }
+
+      5% {
+        opacity: 0.85;
+      }
+
+      10% {
+        opacity: 0.95;
+      }
+
+      15% {
+        opacity: 0.75;
+      }
+
+      /* Glitch dip */
+      20% {
+        opacity: 0.98;
+      }
+
+      40% {
+        opacity: 0.95;
+      }
+
+      60% {
+        opacity: 0.99;
+      }
+
+      80% {
+        opacity: 0.90;
+      }
+
+      100% {
+        opacity: 0.99;
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 10;
+      /* Above effects */
+      animation: flicker 2s infinite;
+      /* Slower, deeper flicker */
+    }
+
+    .crt-overlay {
+      /* Vignette */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      background: radial-gradient(circle, rgba(10, 20, 30, 0) 50%, rgba(0, 0, 0, 0.6) 90%);
+      z-index: 999;
+    }
+
+    /* Glitch Text Effect on Hover */
+    h1:hover {
+      animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+      color: var(--danger);
+    }
+
+    @keyframes glitch {
+      0% {
+        transform: translate(0);
+      }
+
+      20% {
+        transform: translate(-2px, 2px);
+      }
+
+      40% {
+        transform: translate(-2px, -2px);
+      }
+
+      60% {
+        transform: translate(2px, 2px);
+      }
+
+      80% {
+        transform: translate(2px, -2px);
+      }
+
+      100% {
+        transform: translate(0);
+      }
+    }
+
+    h1,
+    h2,
+    h3,
+    h4 {
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    h1 {
+      font-size: 1.4rem;
+      color: var(--success);
+      /* Green Title */
+      text-shadow: 0 0 8px rgba(74, 222, 128, 0.4);
+      margin-bottom: 2px;
+    }
+
+    h1 span {
+      color: var(--text);
+      font-size: 0.7em;
+      letter-spacing: 4px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 15px;
+      /* Retro Border Style */
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .logo {
+      width: 48px;
+      height: 48px;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+      border: 1px solid var(--border);
+      padding: 2px;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .card {
+      background: rgba(15, 15, 26, 0.6);
+      border: 1px solid var(--border);
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+      position: relative;
+    }
+
+    /* Dashed Border Effect for Cards */
+    .card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 6px;
+      pointer-events: none;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    input[type="number"],
+    input[type="text"],
+    textarea,
+    select {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.9rem;
+      margin-bottom: 12px;
+      border-radius: 4px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 8px rgba(59, 130, 246, 0.3);
+    }
+
+    /* Base Button Style */
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-weight: bold;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 8px;
+      /* Spooky CRT Flicker & Texture */
+      background-image: linear-gradient(to bottom,
+          rgba(255, 255, 255, 0.03) 50%,
+          rgba(0, 0, 0, 0.03) 50%);
+      background-size: 100% 2px;
+      animation: crt-flicker 0.1s infinite;
+      text-shadow: 0 0 5px currentColor;
+    }
+
+    /* Moving Interference Lines (Multiple & Thin) */
+    button::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 300%;
+      background: repeating-linear-gradient(to bottom,
+          transparent,
+          transparent 4px,
+          rgba(255, 255, 255, 0.1) 4px,
+          rgba(255, 255, 255, 0.1) 5px
+          /* 1px lines */
+        );
+      animation: scan 4s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes scan {
+      0% {
+        transform: translateY(-33%);
+      }
+
+      100% {
+        transform: translateY(0%);
+      }
+    }
+
+    @keyframes crt-flicker {
+      0% {
+        opacity: 0.98;
+      }
+
+      50% {
+        opacity: 0.92;
+      }
+
+      100% {
+        opacity: 0.98;
+      }
+    }
+
+    button:active:not(:disabled) {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
+
+    /* SPECIFIC BUTTON STYLES */
+
+    /* 1. Initiate Benchmark - Green Gradient */
+    #startBtn {
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.2), rgba(34, 197, 94, 0.4));
+      border: 1px solid var(--success);
+      color: var(--success);
+      text-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
+      margin-top: 5px;
+      font-size: 1rem;
+    }
+
+    #startBtn:hover:not(:disabled) {
+      background: var(--success);
+      color: #000;
+      box-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
+    }
+
+    /* 2. Inject Prompt - Purple/Pink */
+    #injectBtn {
+      background: linear-gradient(135deg, rgba(168, 85, 247, 0.2), rgba(139, 92, 246, 0.4));
+      border: 1px solid var(--accent);
+      color: #eab308;
+      /* Yellow text for contrast */
+      color: #fff;
+      text-shadow: 0 0 5px var(--accent);
+    }
+
+    #injectBtn:hover:not(:disabled) {
+      background: var(--accent);
+      box-shadow: 0 0 15px var(--accent-glow);
+    }
+
+    /* 3. Analyze Selection - Amber/Gold */
+    #analyzeBtn {
+      background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(202, 138, 4, 0.4));
+      border: 1px solid var(--warning);
+      color: #fff;
+      /* Dark text for amber */
+      text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      color: var(--warning);
+      text-shadow: 0 0 2px var(--warning);
+    }
+
+    #analyzeBtn:hover:not(:disabled) {
+      background: var(--warning);
+      color: #000;
+      box-shadow: 0 0 15px rgba(251, 191, 36, 0.6);
+    }
+
+    #logManualBtn {
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.18), rgba(22, 163, 74, 0.35));
+      border: 1px solid var(--success);
+      color: var(--success);
+      text-shadow: 0 0 5px rgba(74, 222, 128, 0.45);
+    }
+
+    #logManualBtn:hover:not(:disabled) {
+      background: var(--success);
+      color: #000;
+      box-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
+    }
+
+    #viewSummaryBtn {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.18), rgba(37, 99, 235, 0.35));
+      border: 1px solid var(--secondary);
+      color: var(--secondary);
+      text-shadow: 0 0 5px rgba(59, 130, 246, 0.45);
+    }
+
+    #viewSummaryBtn:hover:not(:disabled) {
+      background: var(--secondary);
+      color: #000;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+
+
+    #status {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      margin-top: 5px;
+      padding-top: 10px;
+      color: var(--text-dim);
+    }
+
+    #status span:last-child {
+      color: var(--success);
+      text-shadow: 0 0 5px rgba(74, 222, 128, 0.5);
+    }
+
+    .progress-container {
+      height: 8px;
+      background: #111;
+      border: 1px solid var(--border);
+      margin: 10px 0;
+      border-radius: 4px;
+      display: none;
+      overflow: hidden;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), var(--accent));
+      width: 0%;
+      transition: width 0.3s ease;
+      box-shadow: 0 0 10px var(--secondary);
+      position: relative;
+    }
+
+    #results-area {
+      margin-top: 15px;
+      max-height: 220px;
+      overflow-y: auto;
+      border: 1px solid var(--border);
+      padding: 8px;
+      background: rgba(0, 0, 0, 0.4);
+      font-size: 0.8rem;
+      color: var(--text);
+      border-radius: 4px;
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #050510;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--border);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--secondary);
+    }
+
+    .result-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: 2px;
+    }
+
+    .technique-name {
+      color: var(--secondary);
+      font-weight: bold;
+    }
+
+    .badge {
+      padding: 2px 6px;
+      font-size: 0.7rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      border-radius: 2px;
+    }
+
+    .success {
+      background: rgba(74, 222, 128, 0.15);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    .failed {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    /* Stats Styles */
+    .stats {
+      margin-top: 10px;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 4px;
+    }
+
+    .stats h3 {
+      color: var(--accent);
+      border-bottom: 1px dashed var(--accent);
+      padding-bottom: 4px;
+      margin-bottom: 10px;
+    }
+
+    /* Checkbox Style */
+    #useCustomPrompt {
+      accent-color: var(--secondary);
+      transform: scale(1.1);
+    }
+
+    /* Cursor Blink */
+    @keyframes blink {
+      0% {
+        opacity: 0;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .cursor-blink {
+      animation: blink 1s step-end infinite;
+      color: var(--secondary);
+      font-weight: bold;
+      margin-left: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="static-noise"></div>
+  <div class="crt-overlay"></div>
+  <div class="container">
+    <div class="header" style="justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <img src="icon.png" alt="Logo" class="logo">
+        <h1>CyberSec <span>ArcShield</span></h1>
+      </div>
+      <div id="api-status-tag"
+        style="font-size: 0.6rem; padding: 2px 6px; border: 1px solid var(--success); color: var(--success); border-radius: 3px; font-weight: bold; background: rgba(74, 222, 128, 0.05); height: fit-content; margin-top: 5px;">
+        API: <span id="status-text">ONLINE</span>
+      </div>
+    </div>
+
+    <div class="card" style="border-color: var(--secondary); margin-top: 10px;">
+      <label style="color: var(--accent); margin-bottom: 10px; display: block;">WEB_APPLICATION_SECURITY</label>
+      <button id="injectBtn">INJECT_PROMPT</button>
+      <button id="analyzeBtn">ANALYZE_SELECTION</button>
+    </div>
+
+    <div class="card" style="border-color: var(--success); margin-top: 10px;">
+      <label style="color: var(--success); margin-bottom: 10px; display: block;">MANUAL_ASR_LOGGER</label>
+      <label for="platformSelect">PLATFORM</label>
+      <select id="platformSelect">
+        <option value="chatgpt">ChatGPT</option>
+        <option value="copilot">Copilot</option>
+        <option value="comet">Comet</option>
+        <option value="other">Other</option>
+      </select>
+
+      <label for="passLabelSelect">PASS_LABEL</label>
+      <select id="passLabelSelect">
+        <option value="baseline">baseline</option>
+        <option value="defense-like">defense-like</option>
+      </select>
+
+      <button id="logManualBtn">LOG_LAST_ANALYSIS_TO_CSV</button>
+      <button id="viewSummaryBtn">VIEW_MANUAL_ASR_SUMMARY</button>
+      <div id="manual-log-area" style="margin-top: 8px; font-size: 0.72rem; color: var(--text-dim); line-height: 1.45; white-space: pre-wrap; border-top: 1px dashed var(--border); padding-top: 8px;">
+        No manual log entries yet.
+      </div>
+    </div>
+
+    <div id="results-area" style="display: none;"></div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+
+</html>
