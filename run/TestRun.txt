@@ -1,54 +1,63 @@
-Project Setup:
-cd "d:\🎓📚\Dokuz Eylül Üniversitesi\8. Dönem\Network Security\Project\PromptEngInCyberSec"
+# ================================================================================
+# CYBER-SECURITY RED-TEAM BENCHMARK: THE MASTER CHECKLIST
+# ================================================================================
+# IMPORTANT: All runs use Deterministic Seed (42) and Zero Temperature (0.0).
+# Keep your terminal open in the project root folder.
 
-================================================================================
-UNIT TESTS
-================================================================================
+# --------------------------------------------------------------------------------
+# STEP 0: VERIFICATION (SYSTEM HEALTH CHECK)
+# --------------------------------------------------------------------------------
+[DONE] STEP 0: Run all unit tests by category
+Command: python src/tests/run_tests_by_category.py
 
-Command 1: Run all 101 unit tests by category (with timing)
-python src/tests/run_tests_by_category.py
+# --------------------------------------------------------------------------------
+# PHASE 1: LOCAL MODELS (OLLAMA) - Faster, No API limits, No Cost
+# --------------------------------------------------------------------------------
 
-================================================================================
-LIVE RED-TEAM SECURITY TESTING (Runtime Campaigns)
-================================================================================
+[DONE] STEP 1: Llama 3.2 (3B)
+Command: python -m src.benchmarks.live_redteam_suite --providers ollama --sample-per-source 40
 
-Command 2: Ollama only - All 4 sources with 40 random samples each
-python -m src.benchmarks.live_redteam_suite --providers ollama --sample-per-source 40 --output-root logs
+[DONE] STEP 2: Gemma 2B (Google Local)
+Command: python -m src.benchmarks.live_redteam_suite --providers ollama --ollama-model gemma:2b --sample-per-source 40
 
-  Sources included (40 random samples each):
-    - Malignant
-    - Chatbot Safety
-    - Prompt Engineering
-    - Fruit Injection Analysis
+[DONE] STEP 3: Qwen 7B (Alibaba Local)
+Command: python -m src.benchmarks.live_redteam_suite --providers ollama --ollama-model qwen:7b --sample-per-source 40
 
-  Output: logs/live_redteam_<timestamp>/ with CSV + visualizations
+[ ] STEP 4: Phi-3 Mini (Microsoft Local)
+Command: python -m src.benchmarks.live_redteam_suite --providers ollama --ollama-model phi3 --sample-per-source 40
 
-================================================================================
-GEMINI-ONLY LIVE RED-TEAM (Run Separately)
-================================================================================
+[ ] STEP 5: DeepSeek-R1 (Thinking Model Local)
+Command: python -m src.benchmarks.live_redteam_suite --providers ollama --ollama-model deepseek-r1:7b --sample-per-source 40
 
-Command 3: Gemini Flash Lite (paid) - all 4 sources, 40 random samples each
-python -m src.benchmarks.live_redteam_suite --providers gemini --gemini-model gemini-2.5-flash-lite --sample-per-source 40 --output-root logs
 
-Command 4: Groq (new) - all 4 sources, 40 random samples each (rate-limit safe)
-python -m src.benchmarks.live_redteam_suite --providers groq --groq-model llama-3.1-8b-instant --sample-per-source 40 --request-delay-ms 3500 --output-root logs
+# --------------------------------------------------------------------------------
+# PHASE 2: CLOUD MODELS (API KEYS REQUIRED) - Slower, Needs Delays
+# --------------------------------------------------------------------------------
 
-Command 5: Mistral (new) - all 4 sources, 40 random samples each (free tier safe)
-python -m src.benchmarks.live_redteam_suite --providers mistral --mistral-model mistral-small-latest --sample-per-source 40 --request-delay-ms 10000 --output-root logs
+[DONE] STEP 6: Llama 3.1 (Groq Cloud)
+Command: python -m src.benchmarks.live_redteam_suite --providers groq --sample-per-source 40 --request-delay-ms 5000
 
-Command 6: Hugging Face (Qwen 2.5) - all 4 sources, 40 random samples each (Inference API safe)
-python -m src.benchmarks.live_redteam_suite --providers huggingface --huggingface-model Qwen/Qwen2.5-7B-Instruct --sample-per-source 40 --request-delay-ms 25000 --output-root logs
+[DONE] STEP 7: Mistral Small (Mistral Cloud)
+Command: python -m src.benchmarks.live_redteam_suite --providers mistral --sample-per-source 40 --request-delay-ms 10000
 
-Command 7: OpenAI (e.g., gpt-5-mini) - all 4 sources, 40 random samples each (API key required)
-python -m src.benchmarks.live_redteam_suite --providers openai --openai-model gpt-5-mini --sample-per-source 40 --output-root logs --request-delay-ms 10000
+[DONE] STEP 8: GPT-5 Mini (OpenAI Cloud)
+Command: python -m src.benchmarks.live_redteam_suite --providers openai --sample-per-source 40 --request-delay-ms 10000
 
-- The suite randomly samples per source by default.
-- Gemini key policy: only GEMINI_FLASH_LITE_API_KEY is used.
-- GEMINI_API_KEY is ignored by code.
-- Groq key policy: GROQ_API_KEY is used.
-- Groq tip: keep --request-delay-ms 3500 (or higher) on on-demand tier to complete 40-sample runs.
-- Mistral key policy: MISTRAL_API_KEY is used.
-- Mistral tip: --request-delay-ms 10000 (10 seconds) is used for free tier stability; `mistral-small-latest` (Comm. 5) is a large proprietary model; `Mistral-7B` (Comm. 7) is a smaller open-source model.
-- Hugging Face key policy: HUGGING_FACE_API_KEY is used.
-- Hugging Face tip: free Inference API requires high delay (25-30s+) for stability across 40 samples (Qwen is 25s, Gemma is 30s).
-+ OpenAI key policy: OPENAI_API_KEY is used. Set your key in the .env file. If using the free or trial tier, use --request-delay-ms 10000 (10 seconds) or higher to avoid rate limits and errors. Adjust as needed for your plan.
+[IN PROGRESS] STEP 9: Gemini Flash Latest (Google Cloud)
+Command: python -m src.benchmarks.live_redteam_suite --providers gemini --gemini-model gemini-flash-latest --sample-per-source 40 --request-delay-ms 35000
+
+
+# --------------------------------------------------------------------------------
+# PHASE 3: VISUALIZATION & REPORTING
+# --------------------------------------------------------------------------------
+
+[ ] STEP 10: Generate Master Diagrams
+1. Update 'RUN_FOLDERS' in logs/diagrams.py with your new folder names.
+2. Run: python logs/diagrams.py
+
+# --------------------------------------------------------------------------------
+# QUICK TIPS:
+# - Use THE NEWEST VERSIONS (Phi 3.5, Gemini 1.5, DeepSeek R1).
+# - Gemini free tier MUST have --request-delay-ms 20000 (20 seconds).
+# - OpenAI 'gpt-5-mini' refers to the latest optimized mini model.
+# --------------------------------------------------------------------------------

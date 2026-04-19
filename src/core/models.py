@@ -7,11 +7,11 @@ from huggingface_hub import InferenceClient
 
 
 def _resolve_gemini_api_key(api_key=None):
-    """Resolve Gemini API key from GEMINI_FLASH_LITE_API_KEY only.
-
-    The api_key argument is intentionally ignored to enforce a single key source.
-    """
-    return os.getenv("GEMINI_FLASH_LITE_API_KEY")
+    """Resolve Gemini API key from FLASH_LITE or the standard GEMINI_API_KEY."""
+    key = os.getenv("GEMINI_FLASH_LITE_API_KEY")
+    if not key:
+        key = os.getenv("GEMINI_API_KEY")
+    return key
 
 class ModelClient:
     """Base class for AI model clients."""
@@ -34,7 +34,7 @@ class OllamaClient(ModelClient):
             "stream": False,
             "options": {
                 "num_predict": 256,
-                "temperature": 0.7
+                "temperature": 0.0
             }
         }
         
@@ -47,7 +47,7 @@ class OllamaClient(ModelClient):
 
 class GeminiClient(ModelClient):
     """Client for Google Gemini API."""
-    def __init__(self, api_key=None, model_name="gemini-2.5-flash"):
+    def __init__(self, api_key=None, model_name="gemini-1.5-flash"):
         self.api_key = _resolve_gemini_api_key(api_key)
         self.model_name = model_name
         self.url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
@@ -135,7 +135,7 @@ class GroqClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": 0.7,
+            "temperature": 0.0,
             # Keep responses compact to reduce TPM pressure during benchmark loops.
             "max_tokens": 128,
         }
@@ -209,7 +209,7 @@ class MistralClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": 0.7,
+            "temperature": 0.0,
             "max_tokens": 128,
         }
 
@@ -287,7 +287,7 @@ class OpenAIClient(ModelClient):
             data["max_completion_tokens"] = 4096
         else:
             data["max_tokens"] = 256
-            data["temperature"] = 0.7
+            data["temperature"] = 0.0
 
 
         max_retries = 5
@@ -384,7 +384,7 @@ class HuggingFaceClient(ModelClient):
                     model=self.model_name,
                     messages=messages,
                     max_tokens=256,
-                    temperature=0.7,
+                    temperature=0.0,
                 )
                 
                 return response.choices[0].message.content
@@ -425,7 +425,7 @@ def get_client(provider, **kwargs):
     if provider == "ollama":
         return OllamaClient(model_name=kwargs.get("model_name", "llama3.2"))
     elif provider == "gemini":
-        return GeminiClient(model_name=kwargs.get("model_name", "gemini-2.0-flash-lite-preview-02-05"))
+        return GeminiClient(model_name=kwargs.get("model_name", "gemini-1.5-flash"))
     elif provider == "groq":
         return GroqClient(model_name=kwargs.get("model_name", "llama-3.1-8b-instant"))
     elif provider == "mistral":

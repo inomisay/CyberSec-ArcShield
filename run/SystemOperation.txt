@@ -1,0 +1,40 @@
+# ================================================================================
+# CYBERSEC-ARCSHIELD: SYSTEM OPERATION GUIDE
+# ================================================================================
+
+# --------------------------------------------------------------------------------
+# 1. LIVE MONITORING DASHBOARD (React/Vite)
+# --------------------------------------------------------------------------------
+# Description: Visualizes real-time protection stats and attack trends.
+
+Commands:
+1. Open a new terminal.
+2. cd dashboard
+3. npm install (only if first time)
+4. npm run dev
+
+Access:
+- Open your browser to: http://localhost:5173
+
+# --------------------------------------------------------------------------------
+# 2. BROWSER EXTENSION (Chrome/Edge)
+# --------------------------------------------------------------------------------
+# Description: Client-side protection for LLM interfaces (ChatGPT, Claude, etc.)
+
+Installation:
+1. Open Chrome/Edge and go to: chrome://extensions/
+2. Enable "Developer mode" (toggle in top right).
+3. Click "Load unpacked".
+4. Select the 'extension' folder from this project directory:
+   Path: d:\🎓📚\Dokuz Eylül Üniversitesi\8. Dönem\Network Security\Project\PromptEngInCyberSec\extension
+
+# --------------------------------------------------------------------------------
+# 3. BACKEND API (FastAPI)
+# --------------------------------------------------------------------------------
+# Description: Required for the extension and dashboard to function.
+
+Command:
+- python -m src.api.main
+
+Access:
+- Swagger Docs: http://localhost:8000/docs

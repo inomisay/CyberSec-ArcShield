@@ -51,6 +51,7 @@ async def run_multi_benchmark(sample_per_source=10, sources=None, consistency=1,
             if not prompts:
                 continue
 
+            random.seed(42)
             selected = random.sample(prompts, min(sample_per_source, len(prompts))) if sample_per_source else prompts
             all_prompts.extend(selected)
 
