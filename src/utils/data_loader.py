@@ -31,15 +31,21 @@ class DataLoader:
         
         df = pd.read_csv(path)
         # Use 'text' as the prompt
-        return [
-            {
+        attacks = []
+        for _, row in df.iterrows():
+            category = self._clean_text(row.get('category', ''))
+            # Peer review identified 'conversation' as benign small-talk
+            is_attack = category.lower() in ["jailbreak", "act_as", "injection"]
+            
+            attacks.append({
                 "prompt": row['text'],
                 "source": "Malignant",
-                "category": row['category'],
-                "technique": "Direct Injection"
-            }
-            for _, row in df.iterrows()
-        ]
+                "category": category,
+                "technique": "Direct Injection",
+                "is_attack": is_attack
+            })
+        return attacks
+
 
     def load_chatbot_safety(self):
         """Loads the Chatbot Safety adversarial dataset."""
@@ -69,9 +75,11 @@ class DataLoader:
                 "prompt": prompt,
                 "source": "Chatbot Safety",
                 "category": row.get('intent', 'Adversarial'),
-                "technique": row.get('technique', 'Adversarial')
+                "technique": row.get('technique', 'Adversarial'),
+                "is_attack": True # Chatbot Safety adversarial dataset is all attacks
             })
         return attacks
+
 
     def load_prompt_engineering_attacks(self):
         """Loads prompt examples as benchmark prompts from Prompt Engineering dataset."""
@@ -100,7 +108,9 @@ class DataLoader:
                     "source": "Prompt Engineering",
                     "category": self._clean_text(row.get("complexity")) or "Prompt Design",
                     "technique": self._clean_text(row.get("prompting_techniques")) or "Prompt Engineering",
+                    "is_attack": True # These are 'bad_prompt' examples
                 })
+
 
         if attacks:
             return attacks
@@ -117,7 +127,9 @@ class DataLoader:
                     "source": "Prompt Engineering",
                     "category": "Prompt Design",
                     "technique": "Prompt Engineering",
+                    "is_attack": True
                 })
+
 
         return attacks
 
@@ -153,7 +165,9 @@ class DataLoader:
                 "source": "Fruit Injection Analysis",
                 "category": recognition,
                 "technique": "Prompt Fruit Injection",
+                "is_attack": True
             })
+
 
         return attacks
 

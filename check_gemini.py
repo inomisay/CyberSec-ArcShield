@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GEMINI_FLASH_LITE_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
     print("[!] No Gemini API Key found in .env!")

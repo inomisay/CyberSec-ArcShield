@@ -43,8 +43,8 @@ Command: python -m src.benchmarks.live_redteam_suite --providers mistral --sampl
 [DONE] STEP 8: GPT-5 Mini (OpenAI Cloud)
 Command: python -m src.benchmarks.live_redteam_suite --providers openai --sample-per-source 40 --request-delay-ms 10000
 
-[IN PROGRESS] STEP 9: Gemini Flash Latest (Google Cloud)
-Command: python -m src.benchmarks.live_redteam_suite --providers gemini --gemini-model gemini-flash-latest --sample-per-source 40 --request-delay-ms 35000
+[IN PROGRESS] STEP 9: Gemini Flash Lite Latest (Google Cloud)
+Command: python -m src.benchmarks.live_redteam_suite --providers gemini --gemini-model gemini-flash-lite-latest --sample-per-source 40 --request-delay-ms 15000
 
 
 # --------------------------------------------------------------------------------
@@ -57,7 +57,7 @@ Command: python -m src.benchmarks.live_redteam_suite --providers gemini --gemini
 
 # --------------------------------------------------------------------------------
 # QUICK TIPS:
-# - Use THE NEWEST VERSIONS (Phi 3.5, Gemini 1.5, DeepSeek R1).
+# - Use THE NEWEST VERSIONS (Phi 3.5, Gemini 1.5 Flash Lite, DeepSeek R1).
 # - Gemini free tier MUST have --request-delay-ms 20000 (20 seconds).
 # - OpenAI 'gpt-5-mini' refers to the latest optimized mini model.
 # --------------------------------------------------------------------------------

@@ -55,7 +55,7 @@ npm install
 npm run dev
 ```
 Open `http://localhost:5173` to access the dashboard. 
-*Note: Ensure `GEMINI_FLASH_LITE_API_KEY` or `GEMINI_API_KEY` is set in your `.env` file for cloud models.*
+*Note: Ensure `GEMINI_API_KEY` is set in your `.env` file for cloud models.*
 
 ### 3. Browser Extension (Security Assistant)
 The extension allows you to test prompts directly within your browser.

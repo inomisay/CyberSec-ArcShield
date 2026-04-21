@@ -7,11 +7,8 @@ from huggingface_hub import InferenceClient
 
 
 def _resolve_gemini_api_key(api_key=None):
-    """Resolve Gemini API key from FLASH_LITE or the standard GEMINI_API_KEY."""
-    key = os.getenv("GEMINI_FLASH_LITE_API_KEY")
-    if not key:
-        key = os.getenv("GEMINI_API_KEY")
-    return key
+    """Resolve Gemini API key from the environment."""
+    return os.getenv("GEMINI_API_KEY")
 
 class ModelClient:
     """Base class for AI model clients."""
@@ -74,22 +71,37 @@ class GeminiClient(ModelClient):
                 "parts": [{"text": system_prompt}]
             }
         
-        max_retries = 4
+        max_retries = 5
         for attempt in range(max_retries):
             try:
                 print(f"[*] Sending request to Gemini ({self.model_name})...")
-                response = requests.post(f"{self.url}?key={self.api_key}", json=data, headers=headers, timeout=60)
+                response = requests.post(f"{self.url}?key={self.api_key}", json=data, headers=headers, timeout=90)
 
+                # 429: Rate Limit
                 if response.status_code == 429:
                     error_msg = response.json().get('error', {}).get('message', '')
                     match = re.search(r'retry in ([\d.]+)s', error_msg)
-                    wait = float(match.group(1)) + 2 if match else 15
+                    wait = float(match.group(1)) + 5 if match else 20
                     print(f"[!] Rate limited. Waiting {wait:.1f}s before retry {attempt+1}/{max_retries}...")
                     time.sleep(wait)
                     continue
 
+                # 503: Service Unavailable / High Demand
+                if response.status_code == 503:
+                    print(f"[!] Server Busy (503). Waiting 30s before retry {attempt+1}/{max_retries}...")
+                    time.sleep(30)
+                    continue
+
                 if response.status_code != 200:
-                    error_msg = response.json().get('error', {}).get('message', 'Unknown Error')
+                    json_err = response.json()
+                    error_msg = json_err.get('error', {}).get('message', 'Unknown Error')
+                    
+                    # Some "high demand" errors might come as other status codes with specific messages
+                    if "high demand" in error_msg.lower() or "overloaded" in error_msg.lower():
+                        print(f"[!] {error_msg}. Waiting 45s before retry {attempt+1}/{max_retries}...")
+                        time.sleep(45)
+                        continue
+                        
                     print(f"[!] Gemini API Error: {error_msg}")
                     return f"Gemini Error: {error_msg}"
 
@@ -99,11 +111,15 @@ class GeminiClient(ModelClient):
                 else:
                     return "Gemini Error: No response content returned."
 
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                print(f"[!] Gemini Connection Exception ({type(e).__name__}): {e}. Retrying {attempt+1}/{max_retries}...")
+                time.sleep(10) # Short wait before connection retry
+                continue
             except Exception as e:
                 print(f"[!] Gemini Client Exception: {e}")
                 return f"Gemini Error: {e}"
 
-        return "Gemini Error: Max retries exceeded (rate limit)."
+        return "Gemini Error: Max retries exceeded (api error or rate limit)."
 
 
 class GroqClient(ModelClient):

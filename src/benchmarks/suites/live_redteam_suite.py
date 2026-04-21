@@ -109,14 +109,27 @@ def _load_prompts(
     return prompts
 
 
-def _evaluate_response(client, provider, model, judge, prompt_text, source, mode, system_prompt=None):
+def _evaluate_response(client, provider, model, judge, prompt_entry, source, mode, system_prompt=None):
+    # Use ground truth if available in the prompt entry
+    is_attack_gt = None
+    if isinstance(prompt_entry, dict):
+        is_attack_gt = prompt_entry.get("is_attack")
+        prompt_text = prompt_entry.get("prompt", "") # Extract actual text
+    elif hasattr(prompt_entry, "is_attack"):
+        is_attack_gt = prompt_entry.is_attack
+        prompt_text = str(prompt_entry)
+    else:
+        prompt_text = str(prompt_entry)
+
     started = time.perf_counter()
     response = client.generate(prompt_text, system_prompt=system_prompt)
     latency_ms = round((time.perf_counter() - started) * 1000.0, 2)
     strategy = judge.classify_strategy(prompt_text)
     complexity = round(judge.estimate_complexity(prompt_text), 3)
-    intent = judge.assess_prompt_intent(prompt_text)
+    
+    intent = judge.assess_prompt_intent(prompt_text, ground_truth_is_attack=is_attack_gt)
     prompt_is_attack = bool(intent.get("is_attack", False))
+
 
     provider_error = _is_provider_error(response)
     row = {
@@ -815,6 +828,7 @@ def run_live_suite(
     gemini_api_key,
     request_delay_ms,
     output_root,
+    resume_path=None,
 ):
     prompts = _load_prompts(
         base_path=base_path,
@@ -834,10 +848,19 @@ def run_live_suite(
     defense_prompt = get_defense_system_prompt()
 
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_dir = os.path.join(output_root, f"live_redteam_{timestamp}")
-    os.makedirs(out_dir, exist_ok=True)
-
-    all_rows = []
+    # 1. Prepare Output Directory
+    if resume_path and os.path.exists(resume_path):
+        out_dir = os.path.dirname(os.path.abspath(resume_path))
+        print(f"[*] Resuming from: {resume_path}")
+        try:
+            all_rows = pd.read_csv(resume_path).to_dict('records')
+        except Exception as e:
+            print(f"[!] Failed to load resume file: {e}")
+            all_rows = []
+    else:
+        out_dir = os.path.join(output_root, f"live_redteam_{timestamp}")
+        os.makedirs(out_dir, exist_ok=True)
+        all_rows = []
     delay_sec = max(0.0, request_delay_ms / 1000.0)
 
     for provider in providers:
@@ -867,15 +890,33 @@ def run_live_suite(
         print(f"\n=== Running provider: {provider} (model={model}) ===")
 
         for idx, entry in enumerate(prompts, start=1):
-            prompt = entry.get("prompt", "")
+            prompt_text = entry.get("prompt", "")
             source = entry.get("source", "Unknown")
+
+            # Check if this prompt already has SUCCESSFUL results in all_rows (both no_def and with_def)
+            if resume_path:
+                matches_no = [r for r in all_rows if r['provider'] == provider and r['prompt'] == prompt_text and r['mode'] == 'no_defense']
+                matches_def = [r for r in all_rows if r['provider'] == provider and r['prompt'] == prompt_text and r['mode'] == 'with_defense']
+                
+                # If we have both and NO ProviderError, we skip
+                if matches_no and matches_def:
+                    no_err = matches_no[0].get('provider_error', False) or (matches_no[0].get('classification') == 'ProviderError')
+                    def_err = matches_def[0].get('provider_error', False) or (matches_def[0].get('classification') == 'ProviderError')
+                    
+                    if not no_err and not def_err:
+                        # Success! Skip.
+                        continue
+                    else:
+                        print(f"[*] Retrying failed prompt {idx}/{len(prompts)} for {provider}...")
+                        # Remove failed rows so we can re-add them
+                        all_rows = [r for r in all_rows if not (r['provider'] == provider and r['prompt'] == prompt_text)]
 
             no_def_row = _evaluate_response(
                 client=client,
                 provider=provider,
                 model=model,
                 judge=judge,
-                prompt_text=prompt,
+                prompt_entry=entry, # Pass the whole dict to use Ground Truth is_attack
                 source=source,
                 mode="no_defense",
                 system_prompt=None,
@@ -890,12 +931,13 @@ def run_live_suite(
                 provider=provider,
                 model=model,
                 judge=judge,
-                prompt_text=prompt,
+                prompt_entry=entry, # Pass the whole dict
                 source=source,
                 mode="with_defense",
                 system_prompt=defense_prompt,
             )
             all_rows.append(with_def_row)
+
 
             if delay_sec > 0:
                 time.sleep(delay_sec)
@@ -948,11 +990,13 @@ def run_live_suite(
     _plot_asr_by_strategy(full_df, out_dir, provider_text, model_text)
     _plot_complexity_vs_asr(full_df, out_dir)
 
-    print("\n--- Provider Comparison (for paper) ---")
+    print("\n--- Provider Comparison (Executive Summary) ---")
     if provider_comp_df.empty:
         print("No provider comparison data generated.")
     else:
-        print(provider_comp_df.to_string(index=False))
+        # Sort by improvement for clarity
+        print(provider_comp_df.sort_values("defense_improvement_pp", ascending=False).to_string(index=False))
+
 
     print("\nOutput files:")
     print(f"- Raw rows:            {raw_csv}")
@@ -985,9 +1029,10 @@ def parse_args():
     parser.add_argument(
         "--sample-per-source",
         type=int,
-        default=10,
-        help="Number of prompts to take from each source",
+        default=30, # Increased per peer review recommendation (N >= 30)
+        help="Number of prompts to take from each source (Recommended N >= 30 for statistical weight)",
     )
+
     parser.add_argument(
         "--skip-malignant",
         action="store_true",
@@ -1015,8 +1060,8 @@ def parse_args():
     )
     parser.add_argument(
         "--gemini-model",
-        default="gemini-2.5-flash",
-        help="Gemini model name",
+        default="gemini-flash-lite-latest",
+        help="Gemini model name (Recommended: gemini-flash-lite-latest for stability)",
     )
     parser.add_argument(
         "--groq-model",
@@ -1041,7 +1086,7 @@ def parse_args():
     parser.add_argument(
         "--gemini-api-key",
         default=None,
-        help="Deprecated for this project policy. Gemini always uses GEMINI_FLASH_LITE_API_KEY from .env.",
+        help="Deprecated for this project policy. Gemini defaults to GEMINI_API_KEY from .env.",
     )
     parser.add_argument(
         "--output-root",
@@ -1053,6 +1098,11 @@ def parse_args():
         type=int,
         default=0,
         help="Delay in milliseconds between provider calls (useful to avoid Groq rate limits)",
+    )
+    parser.add_argument(
+        "--resume",
+        default=None,
+        help="Path to a partial CSV file to resume from",
     )
     return parser.parse_args()
 
@@ -1077,6 +1127,7 @@ def main():
         gemini_api_key=args.gemini_api_key,
         request_delay_ms=args.request_delay_ms,
         output_root=args.output_root,
+        resume_path=args.resume,
     )
 
     print(f"\nLive red-team suite finished. Results folder: {out_dir}")

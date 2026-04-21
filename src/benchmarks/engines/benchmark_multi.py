@@ -66,8 +66,11 @@ async def run_multi_benchmark(sample_per_source=10, sources=None, consistency=1,
     for i, entry in enumerate(all_prompts):
         prompt_text = entry['prompt']
         source = entry['source']
-        intent = judge.assess_prompt_intent(prompt_text)
+        is_attack_gt = entry.get('is_attack')
+        
+        intent = judge.assess_prompt_intent(prompt_text, ground_truth_is_attack=is_attack_gt)
         prompt_is_attack = bool(intent.get('is_attack', False))
+
         
         yield {
             "progress": i / len(all_prompts),
