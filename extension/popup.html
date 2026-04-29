@@ -617,6 +617,27 @@
       font-weight: bold;
       margin-left: 2px;
     }
+
+    .section-toggle {
+      background: rgba(74, 222, 128, 0.08);
+      border: 1px dashed var(--success);
+      color: var(--success);
+      font-size: 0.72rem;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+      text-align: left;
+      letter-spacing: 1px;
+    }
+
+    .section-toggle:hover:not(:disabled) {
+      background: rgba(74, 222, 128, 0.2);
+      color: #000;
+      box-shadow: 0 0 12px rgba(74, 222, 128, 0.4);
+    }
+
+    .collapsed {
+      display: none;
+    }
   </style>
 </head>
 
@@ -637,12 +658,24 @@
 
     <div class="card" style="border-color: var(--secondary); margin-top: 10px;">
       <label style="color: var(--accent); margin-bottom: 10px; display: block;">WEB_APPLICATION_SECURITY</label>
+      <label for="injectModeSelect">INJECT_MODE</label>
+      <select id="injectModeSelect">
+        <option value="dataset">Dataset Prompt</option>
+        <option value="custom">My Prompt</option>
+      </select>
+
+      <label id="customPromptLabel" for="customPromptInput" class="collapsed">CUSTOM_PROMPT</label>
+      <textarea id="customPromptInput" class="collapsed" placeholder="Type your own prompt to inject..." rows="3"></textarea>
+
       <button id="injectBtn">INJECT_PROMPT</button>
       <button id="analyzeBtn">ANALYZE_SELECTION</button>
     </div>
 
     <div class="card" style="border-color: var(--success); margin-top: 10px;">
       <label style="color: var(--success); margin-bottom: 10px; display: block;">MANUAL_ASR_LOGGER</label>
+      <button id="toggleManualLoggerBtn" class="section-toggle">SHOW_LOGGER</button>
+
+      <div id="manualLoggerBody" class="collapsed">
       <label for="platformSelect">PLATFORM</label>
       <select id="platformSelect">
         <option value="chatgpt">ChatGPT</option>
@@ -661,6 +694,7 @@
       <button id="viewSummaryBtn">VIEW_MANUAL_ASR_SUMMARY</button>
       <div id="manual-log-area" style="margin-top: 8px; font-size: 0.72rem; color: var(--text-dim); line-height: 1.45; white-space: pre-wrap; border-top: 1px dashed var(--border); padding-top: 8px;">
         No manual log entries yet.
+      </div>
       </div>
     </div>
 

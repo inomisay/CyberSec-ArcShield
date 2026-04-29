@@ -115,7 +115,8 @@ async function startBenchmark() {
   const sampleSize = parseInt(sampleInput.value);
   const isCustom = useCustomCheck.checked;
   const customPrompt = customText.value.trim();
-  const [provider, model] = modelSelect.value.split(':');
+  const [provider, ...modelParts] = modelSelect.value.split(':');
+  const model = modelParts.join(':');
 
   if (isCustom && !customPrompt) {
     statusText.innerText = "ERROR:_ENTER_CUSTOM_PROMPT";

@@ -215,7 +215,7 @@ if __name__ == "__main__":
     from src.core import attacker
     from src.core.models import get_client
     from src.core.moderator import ResponseModerator
-    attacker._default_client = get_client(args.provider, args.model)
+    attacker._default_client = get_client(args.provider, model_name=args.model)
     attacker._moderator = ResponseModerator(args.provider, args.model or "llama3.2")
     
     async def main():

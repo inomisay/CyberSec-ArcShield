@@ -26,7 +26,7 @@ Installation:
 2. Enable "Developer mode" (toggle in top right).
 3. Click "Load unpacked".
 4. Select the 'extension' folder from this project directory:
-   Path: d:\🎓📚\Dokuz Eylül Üniversitesi\8. Dönem\Network Security\Project\PromptEngInCyberSec\extension
+   Path: PromptEngInCyberSec\extension
 
 # --------------------------------------------------------------------------------
 # 3. BACKEND API (FastAPI)
@@ -34,7 +34,7 @@ Installation:
 # Description: Required for the extension and dashboard to function.
 
 Command:
-- python -m src.api.main
+- uvicorn src.api.server:app --reload
 
 Access:
 - Swagger Docs: http://localhost:8000/docs

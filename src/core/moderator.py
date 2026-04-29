@@ -6,7 +6,7 @@ class ResponseModerator:
     Based on Kumar et al. (2024) multi-layer security suggestions.
     """
     def __init__(self, provider="ollama", model_name="llama3.2"):
-        self.client = get_client(provider, model_name)
+        self.client = get_client(provider, model_name=model_name)
     
     def audit_response(self, user_prompt, model_response):
         """

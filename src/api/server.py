@@ -59,7 +59,7 @@ async def run_benchmark(sample_size: int = 5, custom_prompt: str = None, provide
     from src.core import attacker
     from src.core.models import get_client
     if model or provider != "ollama":
-        attacker._default_client = get_client(provider, model)
+        attacker._default_client = get_client(provider, model_name=model)
 
     async def event_generator():
         async for update in run_multi_benchmark(sample_per_source=sample_size, custom_prompt=custom_prompt):
