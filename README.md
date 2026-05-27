@@ -16,13 +16,14 @@
 - **Futuristic HUD Dashboard**: Real-time monitoring of attack trends and model resilience.
 
 ## 🤖 Models & Providers Supported
-The suite is provider-agnostic, supporting a wide array of state-of-the-art models:
-- **OpenAI**: GPT-4o, GPT-4o-mini, o1-preview.
-- **Google Gemini**: Gemini 2.5 Flash Lite, 2.0 Flash, 1.5 Pro.
-- **Groq**: Llama 3.1 70B (Ultra-low latency inference).
-- **Mistral AI**: Mistral Large, Pixtral.
-- **Hugging Face**: Qwen2.5-72B-Instruct and other Hub models.
-- **Local (Ollama)**: Llama 3.1, Mistral, Gemma 2, Qwen 2.5.
+The suite is provider-agnostic, with command templates for the following evaluated models:
+- **OpenAI**: `gpt-5-mini`.
+- **Google Gemini**: `gemini-flash-lite-latest`, `gemma`.
+- **Groq**: `llama-3.1-8b-instant`.
+- **Mistral AI**: `mistral-small-latest` (currently resolving to `mistral-small-2603`).
+- **Cloudflare Workers AI**: `@cf/qwen/qwen3-30b-a3b-fp8`.
+- **GitHub Models**: `DeepSeek-R1-0528`, `Phi-4-reasoning`.
+- **Local (Ollama)**: `llama3.1:8b`, `qwen3:latest`, `deepseek-r1:latest`, `phi4:latest`, `mistral:latest`, `gemma3:latest`.
 
 ## 📊 Strategic Analysis Tools
 ArcShield goes beyond simple ASR (Attack Success Rate) metrics to provide strategic security insights:
