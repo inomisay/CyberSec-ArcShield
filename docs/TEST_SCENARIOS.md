@@ -8,7 +8,7 @@ Covered components:
 - Backend API (`src/api/server.py`)
 - Core security logic (`src/core/*`)
 - Benchmark pipelines (`src/benchmarks/*`)
-- Data loading and dataset handling (`src/utils/data_loader.py`)
+- Data loading and dataset handling (`src/data/data_loader.py`)
 - Dashboard integration (`dashboard/src/main.ts`)
 - Chrome extension integration (`extension/popup.js`)
 
@@ -26,7 +26,7 @@ Out of scope:
 - Backend starts: `uvicorn src.api.server:app --reload`
 - Optional Ollama running on `http://localhost:11434` for live model tests
 - Optional `GEMINI_API_KEY` for Gemini provider tests
-- Dataset files present under `data/`
+- Dataset files present under `dataset/`
 
 Recommended tooling:
 - `pytest` for automated unit/integration tests
@@ -183,7 +183,7 @@ Recommended tooling:
 ## B. Data Layer – Unit/Contract Scenarios
 
 ### B-01: Malignant dataset path missing
-**Target**: `src/utils/data_loader.py`
+**Target**: `src/data/data_loader.py`
 - Steps:
   1. Point `DataLoader(base_path=empty_temp_dir)`.
   2. Call `load_malignant()`.
@@ -191,14 +191,14 @@ Recommended tooling:
   - Returns empty list, no exception.
 
 ### B-02: Chatbot safety dataset path missing
-**Target**: `src/utils/data_loader.py`
+**Target**: `src/data/data_loader.py`
 - Steps:
   1. Same as above for `load_chatbot_safety()`.
 - Expected:
   - Returns empty list.
 
 ### B-03: Malignant row mapping correctness
-**Target**: `src/utils/data_loader.py`
+**Target**: `src/data/data_loader.py`
 - Steps:
   1. Use small fixture CSV with columns `text`, `category`.
   2. Load via `load_malignant()`.
@@ -206,7 +206,7 @@ Recommended tooling:
   - Each output object contains `prompt`, `source`, `category`, `technique`.
 
 ### B-04: Chatbot safety fallback prompt selection
-**Target**: `src/utils/data_loader.py`
+**Target**: `src/data/data_loader.py`
 - Steps:
   1. Fixture row with empty `persuasive_prompt`, filled `variant_query`.
   2. Load via `load_chatbot_safety()`.
@@ -214,7 +214,7 @@ Recommended tooling:
   - `prompt` uses `variant_query` fallback.
 
 ### B-05: Combined attack list flags
-**Target**: `src/utils/data_loader.py`
+**Target**: `src/data/data_loader.py`
 - Steps:
   1. Mock loaders to return known list sizes.
   2. Call `get_combined_attacks` with different booleans.
@@ -307,7 +307,7 @@ Recommended tooling:
 - Steps:
   1. Run with sample 1 and available model.
 - Expected:
-  - Creates `logs/unified_benchmark_*.csv` with expected columns.
+  - Creates `output/unified_benchmark_*.csv` with expected columns.
 
 ### D-02: Multi benchmark source filtering
 **Target**: `run_multi_benchmark(..., sources=[...])`
@@ -498,11 +498,11 @@ Recommended tooling:
 
 ## 4) Suggested Execution Order
 
-1. Core unit scenarios (A, B)
+1. Core unit scenarios (A)
 2. API integration scenarios (C)
 3. Benchmark functional scenarios (D)
 4. Dashboard and extension E2E scenarios (E, F)
-5. Reliability and regression scenarios (G)
+5. Integration regression scenarios where still useful
 
 ---
 
@@ -511,7 +511,6 @@ Recommended tooling:
 To convert this into a repeatable CI test suite quickly:
 - Add `pytest` and `pytest-asyncio`
 - Add `tests/test_api.py` using FastAPI `TestClient`
-- Add `tests/test_data_loader.py` with CSV fixtures
 - Convert existing smoke scripts in `src/tests/` into true assert-based tests
 - Add one mocked benchmark stream test for NDJSON contract
 

@@ -2,8 +2,11 @@ from .models import get_client
 
 class ResponseModerator:
     """
-    Auidts the primary model's response using a second-pass evaluation.
+    Audits the primary model's response using a second-pass evaluation.
     Based on Kumar et al. (2024) multi-layer security suggestions.
+
+    This module is kept as an optional ArcShield defense layer. The benchmark
+    runner can log it as disabled/enabled separately from the final judge.
     """
     def __init__(self, provider="ollama", model_name="llama3.2"):
         self.client = get_client(provider, model_name=model_name)

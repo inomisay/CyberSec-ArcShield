@@ -9,7 +9,7 @@
 
 Commands:
 1. Open a new terminal.
-2. cd dashboard
+2. cd clients\dashboard
 3. npm install (only if first time)
 4. npm run dev
 
@@ -25,8 +25,8 @@ Installation:
 1. Open Chrome/Edge and go to: chrome://extensions/
 2. Enable "Developer mode" (toggle in top right).
 3. Click "Load unpacked".
-4. Select the 'extension' folder from this project directory:
-   Path: PromptEngInCyberSec\extension
+4. Select the 'clients\extension' folder from this project directory:
+   Path: PromptEngInCyberSec\clients\extension
 
 # --------------------------------------------------------------------------------
 # 3. BACKEND API (FastAPI)

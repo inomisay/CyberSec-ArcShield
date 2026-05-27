@@ -1,3 +1,22 @@
+NO_DEFENSE = "no_defense"
+ARCSHIELD_DEFENSE = "arcshield"
+
+DEFENSE_CONDITIONS = {
+    NO_DEFENSE: {
+        "name": NO_DEFENSE,
+        "defense_enabled": False,
+        "system_prompt_hardening": False,
+        "moderator_enabled": False,
+    },
+    ARCSHIELD_DEFENSE: {
+        "name": ARCSHIELD_DEFENSE,
+        "defense_enabled": True,
+        "system_prompt_hardening": True,
+        "moderator_enabled": False,
+    },
+}
+
+
 def get_defense_system_prompt():
     """
     Returns the system prompt used for defense.
@@ -26,3 +45,18 @@ def apply_defense(prompt):
     # For this implementation, we will rely on the system prompt parameter in the API call
     # But we can also add a pre-prompt here if needed.
     return prompt
+
+
+def get_defense_condition(condition_name=ARCSHIELD_DEFENSE):
+    """Return a reproducible defense-condition configuration."""
+    key = (condition_name or NO_DEFENSE).strip().lower()
+    if key not in DEFENSE_CONDITIONS:
+        raise ValueError(f"Unknown defense condition: {condition_name}")
+    condition = dict(DEFENSE_CONDITIONS[key])
+    condition["system_prompt"] = get_defense_system_prompt() if condition["defense_enabled"] else None
+    return condition
+
+
+def list_defense_conditions():
+    """List supported benchmark defense conditions."""
+    return list(DEFENSE_CONDITIONS)

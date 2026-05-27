@@ -1,0 +1,75 @@
+{
+    "dataset": "evaluation_dataset.csv",
+    "version": "1.0",
+    "description": "Evaluation benchmark for prompt injection defenses in educational LLM tutors.",
+    "columns": {
+        "query_id": {
+            "type": "string",
+            "description": "Unique identifier for each query (format: q_XXXX)"
+        },
+        "text": {
+            "type": "string",
+            "description": "The query text submitted to the tutoring system"
+        },
+        "ground_truth": {
+            "type": "enum",
+            "values": [
+                "injection",
+                "benign"
+            ],
+            "description": "Ground-truth label: 'injection' for adversarial prompts, 'benign' for legitimate educational queries"
+        },
+        "is_injection": {
+            "type": "boolean",
+            "description": "Boolean equivalent of ground_truth (true = injection, false = benign)"
+        },
+        "persona": {
+            "type": "enum",
+            "values": [
+                "red_team_tester",
+                "deadline_student",
+                "teaching_assistant",
+                "curious_beginner",
+                "career_switcher"
+            ],
+            "description": "Simulated user archetype that generated the query"
+        },
+        "scenario": {
+            "type": "enum",
+            "values": [
+                "role_hijack",
+                "instruction_override",
+                "format_bypass",
+                "multi_turn",
+                "obfuscated",
+                "benign"
+            ],
+            "description": "Attack family or benign category"
+        },
+        "language": {
+            "type": "enum",
+            "values": [
+                "en",
+                "pt"
+            ],
+            "description": "Query language: 'en' for English, 'pt' for Portuguese (Brazilian variant)"
+        },
+        "turn_index": {
+            "type": "integer",
+            "description": "Position within a multi-turn exchange (0 = single-turn / first turn)"
+        }
+    },
+    "statistics": {
+        "total_samples": 480,
+        "injection_samples": 369,
+        "benign_samples": 111,
+        "injection_rate": 0.7688,
+        "calibration_split": 0.20,
+        "holdout_split": 0.80,
+        "languages": [
+            "en",
+            "pt"
+        ],
+        "generation_seed": 42
+    }
+}

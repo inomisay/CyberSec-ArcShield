@@ -109,7 +109,8 @@ venv.bak/
 
 # Project specific
 logs/
-data/
-!data/README.md
+output/
+commands/
+dataset/Datasets.txt
 !logs/README.md
 provider_comparison_plots/

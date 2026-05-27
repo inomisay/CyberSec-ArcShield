@@ -18,11 +18,11 @@
 ## 🤖 Models & Providers Supported
 The suite is provider-agnostic, supporting a wide array of state-of-the-art models:
 - **OpenAI**: GPT-4o, GPT-4o-mini, o1-preview.
-- **Google Gemini**: Gemini 2.0 Flash, 1.5 Pro, 1.5 Flash.
+- **Google Gemini**: Gemini 2.5 Flash Lite, 2.0 Flash, 1.5 Pro.
 - **Groq**: Llama 3.1 70B (Ultra-low latency inference).
 - **Mistral AI**: Mistral Large, Pixtral.
 - **Hugging Face**: Qwen2.5-72B-Instruct and other Hub models.
-- **Local (Ollama)**: Llama 3.2, Mistral, Gemma 2.
+- **Local (Ollama)**: Llama 3.1, Mistral, Gemma 2, Qwen 2.5.
 
 ## 📊 Strategic Analysis Tools
 ArcShield goes beyond simple ASR (Attack Success Rate) metrics to provide strategic security insights:
@@ -50,18 +50,18 @@ pip install -r requirements.txt
 Edit the `.env` file with your API keys, then run:
 ```bash
 # Run a sample benchmark on Gemini
-python src/benchmarks/benchmark_multi.py --provider gemini --model gemini-2.0-flash --sample 10
+python src/benchmarks/benchmark_multi.py --provider gemini --model gemini-2.5-flash-lite --sample 10
 
 # Run on OpenAI
-python src/benchmarks/benchmark_multi.py --provider openai --model gpt-4o --sample 5
+python src/benchmarks/benchmark_multi.py --provider openai --model gpt-5-mini --sample 5
 ```
 
 ### 3. Generating Strategic Visualizations
-Once results are collected in the `logs/` directory:
+Once results are collected in the `output/` directory:
 ```bash
 python logs/diagrams.py
 ```
-This will generate high-resolution PNGs in `logs/provider_comparison_plots/`.
+This will generate high-resolution PNGs in `output/provider_comparison_plots/`.
 
 ### 4. Researcher Dashboard
 ```bash
@@ -69,19 +69,25 @@ This will generate high-resolution PNGs in `logs/provider_comparison_plots/`.
 uvicorn src.api.server:app --reload
 
 # Start Frontend (in separate terminal)
-cd dashboard
+cd clients/dashboard
 npm install && npm run dev
 ```
+
+### 5. Browser Extension
+Load the unpacked extension from `clients/extension` in Chrome's extensions page after starting the API server.
 
 ---
 
 ## 📁 Project Structure
 - `src/core/`: The "Brain" containing judicial evaluation and defender logic.
 - `src/benchmarks/`: Core execution engines for multi-dataset evaluation.
-- `logs/`: Diagnostic output and the `diagrams.py` visualization suite.
-- `dashboard/`: React-based visual analytics platform.
-- `extension/`: Chrome extension for real-time prompt analysis.
-- `data/`: Integrated security datasets (Prompt Injection, Jailbreaks, etc).
+- `output/`: Diagnostic output and the `diagrams.py` visualization suite.
+- `clients/dashboard/`: React-based visual analytics platform.
+- `clients/extension/`: Chrome extension for real-time prompt analysis.
+- `dataset/`: Integrated security datasets (Prompt Injection, Jailbreaks, etc).
+- `src/pipeline/prep/`: Data preparation, sampling, and benchmark support scripts.
+- `src/pipeline/analysis/`: Coverage and provenance analysis scripts.
+- `src/pipeline/models/`: Model inventory and hosting metadata scripts.
 
 ## 🎓 Academic Credits & Research
 This project implements metrics and evaluation methodologies inspired by:

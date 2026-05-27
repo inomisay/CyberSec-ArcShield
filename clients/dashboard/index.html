@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/icon.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CyberSec ArcShield Dashboard</title>
+</head>
+
+<body>
+  <!-- CRT Effects -->
+  <div class="static-noise"></div>
+  <div class="crt-overlay"></div>
+
+  <div id="app">
+    <div class="app-container">
+      <header>
+        <div class="logo-section">
+          <h1>CyberSec <span>ArcShield</span></h1>
+        </div>
+        <div class="status-badge" id="backend-status">
+          API: OFFLINE
+        </div>
+      </header>
+
+      <!-- Sidebar / Configuration -->
+      <aside class="panel">
+        <div class="panel-header">RESEARCH_CONFIG</div>
+
+        <div class="control-group">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 5px;">
+            <input type="checkbox" id="use-custom-prompt">
+            <label for="use-custom-prompt" style="margin: 0; cursor: pointer; color: var(--text);">Test My Own
+              Prompt</label>
+          </div>
+          <textarea id="custom-prompt-text" rows="3" placeholder="> ENTER_PAYLOAD..."
+            style="display: none; width: 100%;"></textarea>
+        </div>
+
+        <div id="dataset-controls">
+          <div class="control-group">
+            <label>Samples (per source)</label>
+            <input type="number" id="sample-size" value="5" min="1" max="100" />
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Model Engine</label>
+          <select id="model-select">
+            <option value="ollama:llama3.1:8b">Ollama - llama3.1:8b</option>
+            <option value="ollama:deepseek-r1:latest">Ollama - deepseek-r1:latest</option>
+            <option value="ollama:gemma3:latest">Ollama - gemma3:latest</option>
+            <option value="ollama:qwen3:latest">Ollama - qwen3:latest</option>
+            <option value="ollama:mistral:latest">Ollama - mistral:latest</option>
+            <option value="ollama:phi4:latest">Ollama - phi4:latest</option>
+            <option value="openai:gpt-5-mini">OpenAI - gpt-5-mini</option>
+            <option value="gemini:gemini-flash-lite-latest">Google AI Studio - gemini-flash-lite-latest</option>
+            <option value="mistral:mistral-small">Mistral API - mistral-small</option>
+            <option value="mistral:mistral-medium">Mistral API - mistral-medium</option>
+            <option value="mistral:mistral-large">Mistral API - mistral-large</option>
+            <option value="groq:llama-3.1-8b-instant">Groq Cloud - llama-3.1-8b</option>
+            <option value="cloudflare:@cf/qwen/qwen3-32b">Cloudflare Workers AI - qwen3</option>
+            <option value="github:DeepSeek-R1-0528">GitHub Models - DeepSeek-R1-0528</option>
+            <option value="github:Phi-4-reasoning">GitHub Models - Phi-4-reasoning</option>
+          </select>
+          <div id="api-key-note" style="font-size: 0.6rem; color: var(--warning); margin-top: 4px; display: none;">
+            * Provider key required in .env
+          </div>
+        </div>
+
+        <div class="control-group">
+          <label>Consistency Factor</label>
+          <select id="consistency">
+            <option value="1">1 (Single Run)</option>
+            <option value="2">2 (Validation)</option>
+            <option value="3">3 (High Confidence)</option>
+          </select>
+        </div>
+
+        <button id="start-bench" class="cyber-button">INITIATE_BENCHMARK</button>
+
+        <div class="control-group" style="margin-top: auto; border-top: 1px dashed var(--border); padding-top: 1rem;">
+          <label>Audit Progress</label>
+          <div id="progress-bar-container"
+            style="background: rgba(0,0,0,0.5); height: 4px; border-radius: 2px; overflow: hidden;">
+            <div id="progress-bar"
+              style="width: 0%; height: 100%; background: var(--success); transition: width 0.3s; box-shadow: 0 0 10px var(--success);">
+            </div>
+          </div>
+          <div id="status-text" style="font-size: 0.6rem; color: var(--text-dim); margin-top: 0.5rem;">
+            READY_FOR_EVALUATION</div>
+        </div>
+      </aside>
+
+      <!-- Main Content / Results -->
+      <main class="panel">
+        <div class="panel-header">SEC_AUDIT_LOG_STREAM</div>
+        <div class="feed-container" id="results-feed">
+          <div class="feed-item" style="border: none; opacity: 0.5; font-size: 0.8rem;">
+            Waiting for benchmark initiation...
+          </div>
+        </div>
+
+        <!-- Summary Dashboard Hidden until run ends -->
+        <div id="summary-dashboard" style="display: none; border-top: 1px dashed var(--border); padding-top: 1.5rem;">
+          <div class="panel-header" style="font-size: 0.8rem; margin-bottom: 1rem;">AGGREGATE_REPORT [AUDIT_SUMMARY]
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+            <div class="stat-card" style="padding: 1rem; border-radius: 4px;">
+              <label>ATTACK_SUCCESS (ASR)</label>
+              <div id="stat-asr" style="font-size: 2.2rem; color: var(--danger); font-weight: bold;">--%</div>
+              <div style="font-size: 0.6rem; color: var(--text-dim); margin-top: 4px;">(Failures)</div>
+            </div>
+            <div class="stat-card" style="padding: 1rem; border-radius: 4px;">
+              <label>DEFENSE_BOOST</label>
+              <div id="stat-improvement" style="font-size: 2.2rem; color: var(--success); font-weight: bold;">--%</div>
+              <div style="font-size: 0.6rem; color: var(--text-dim); margin-top: 4px;">(Improvement)</div>
+            </div>
+            <div class="stat-card" style="padding: 1rem; border-radius: 4px;">
+              <label>SYSTEM_ROBUSTNESS</label>
+              <div id="stat-accuracy" style="font-size: 2.2rem; color: var(--secondary); font-weight: bold;">--%</div>
+              <div style="font-size: 0.6rem; color: var(--text-dim); margin-top: 4px;">(Security Score)</div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
+</html>

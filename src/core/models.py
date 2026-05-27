@@ -3,12 +3,25 @@ import json
 import os
 import re
 import time
-from huggingface_hub import InferenceClient
 
 
 def _resolve_gemini_api_key(api_key=None):
     """Resolve Gemini API key from the environment."""
-    return os.getenv("GEMINI_API_KEY")
+    return api_key or os.getenv("GEMINI_API_KEY")
+
+
+DEFAULT_TEMPERATURE = 0.0
+DEFAULT_TOP_P = 1.0
+DEFAULT_MAX_TOKENS = 512
+DEFAULT_MAX_COMPLETION_TOKENS = 512
+DEFAULT_OLLAMA_MODEL = "llama3.1:8b"
+DEFAULT_OLLAMA_QUANTIZATION = "Q4_K_M"
+DEFAULT_GEMINI_MODEL = "gemini-flash-lite-latest"
+DEFAULT_GROQ_MODEL = "llama-3.1-8b-instant"
+DEFAULT_MISTRAL_MODEL = "mistral-small-latest"
+DEFAULT_OPENAI_MODEL = "gpt-5-mini"
+DEFAULT_CLOUDFLARE_MODEL = "@cf/qwen/qwen3-30b-a3b-fp8"
+DEFAULT_GITHUB_MODEL = "Phi-4"
 
 class ModelClient:
     """Base class for AI model clients."""
@@ -17,9 +30,14 @@ class ModelClient:
 
 class OllamaClient(ModelClient):
     """Client for local Ollama instances."""
-    def __init__(self, model_name="llama3.2", base_url="http://localhost:11434"):
+    def __init__(self, model_name=DEFAULT_OLLAMA_MODEL, base_url="http://localhost:11434", temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, top_k=40, max_tokens=DEFAULT_MAX_TOKENS):
         self.model_name = model_name
         self.url = f"{base_url}/api/generate"
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.top_k = top_k
+        self.max_tokens = DEFAULT_MAX_TOKENS
+        self.quantization = DEFAULT_OLLAMA_QUANTIZATION if model_name == DEFAULT_OLLAMA_MODEL else "unknown"
 
     def generate(self, prompt, system_prompt=None):
         # Prepend system prompt for simple models or use 'system' field if supported
@@ -30,8 +48,10 @@ class OllamaClient(ModelClient):
             "prompt": final_prompt,
             "stream": False,
             "options": {
-                "num_predict": 256,
-                "temperature": 0.0
+                "num_predict": self.max_tokens,
+                "temperature": self.temperature,
+                "top_p": self.top_p,
+                "top_k": self.top_k,
             }
         }
         
@@ -44,9 +64,13 @@ class OllamaClient(ModelClient):
 
 class GeminiClient(ModelClient):
     """Client for Google Gemini API."""
-    def __init__(self, api_key=None, model_name="gemini-1.5-flash"):
+    def __init__(self, api_key=None, model_name=DEFAULT_GEMINI_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, top_k=1, max_tokens=DEFAULT_MAX_TOKENS):
         self.api_key = _resolve_gemini_api_key(api_key)
         self.model_name = model_name
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.top_k = top_k
+        self.max_tokens = DEFAULT_MAX_TOKENS
         self.url = f"https://generativelanguage.googleapis.com/v1beta/models/{model_name}:generateContent"
         # Masked debug
         key_status = "FOUND" if self.api_key else "NOT_FOUND"
@@ -63,6 +87,12 @@ class GeminiClient(ModelClient):
         # Prepare content
         data = {
             "contents": [{"role": "user", "parts": [{"text": prompt}]}]
+            ,"generationConfig": {
+                "temperature": self.temperature,
+                "topP": self.top_p,
+                "topK": self.top_k,
+                "maxOutputTokens": self.max_tokens,
+            }
         }
         
         # Official system instruction field for Gemini 1.5
@@ -125,9 +155,12 @@ class GeminiClient(ModelClient):
 class GroqClient(ModelClient):
     """Client for Groq API (OpenAI-compatible chat completions)."""
 
-    def __init__(self, api_key=None, model_name="llama-3.1-8b-instant"):
+    def __init__(self, api_key=None, model_name=DEFAULT_GROQ_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS):
         self.api_key = os.getenv("GROQ_API_KEY")
         self.model_name = model_name
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.max_tokens = DEFAULT_MAX_TOKENS
         self.url = "https://api.groq.com/openai/v1/chat/completions"
         key_status = "FOUND" if self.api_key else "NOT_FOUND"
         print(f"[*] GroqClient initialized (Model: {model_name}, Key: {key_status})")
@@ -151,9 +184,10 @@ class GroqClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": 0.0,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
             # Keep responses compact to reduce TPM pressure during benchmark loops.
-            "max_tokens": 128,
+            "max_tokens": self.max_tokens,
         }
 
         max_retries = 12
@@ -199,9 +233,12 @@ class GroqClient(ModelClient):
 class MistralClient(ModelClient):
     """Client for Mistral AI API (OpenAI-compatible chat completions)."""
 
-    def __init__(self, api_key=None, model_name="open-mistral-7b"):
+    def __init__(self, api_key=None, model_name=DEFAULT_MISTRAL_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS):
         self.api_key = os.getenv("MISTRAL_API_KEY")
         self.model_name = model_name
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.max_tokens = DEFAULT_MAX_TOKENS
         self.url = "https://api.mistral.ai/v1/chat/completions"
         key_status = "FOUND" if self.api_key else "NOT_FOUND"
         print(f"[*] MistralClient initialized (Model: {model_name}, Key: {key_status})")
@@ -225,8 +262,9 @@ class MistralClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": 0.0,
-            "max_tokens": 128,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+            "max_tokens": self.max_tokens,
         }
 
         max_retries = 5
@@ -247,10 +285,15 @@ class MistralClient(ModelClient):
 
                 if response.status_code != 200:
                     try:
-                        error_msg = response.json().get("error", {}).get("message", "Unknown Error")
+                        error_payload = response.json()
+                        error_msg = (
+                            error_payload.get("error", {}).get("message")
+                            or error_payload.get("message")
+                            or json.dumps(error_payload)
+                        )
                     except Exception:
                         error_msg = response.text or "Unknown Error"
-                    print(f"[!] Mistral API Error: {error_msg}")
+                    print(f"[!] Mistral API Error ({response.status_code}): {error_msg}")
                     return f"Mistral Error: {error_msg}"
 
                 json_response = response.json()
@@ -267,9 +310,13 @@ class MistralClient(ModelClient):
 class OpenAIClient(ModelClient):
     """Client for official OpenAI API."""
 
-    def __init__(self, api_key=None, model_name="gpt-4"):
+    def __init__(self, api_key=None, model_name=DEFAULT_OPENAI_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS, max_completion_tokens=DEFAULT_MAX_COMPLETION_TOKENS):
         self.api_key = os.getenv("OPENAI_API_KEY")
         self.model_name = model_name
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.max_tokens = DEFAULT_MAX_TOKENS
+        self.max_completion_tokens = DEFAULT_MAX_COMPLETION_TOKENS
         self.url = "https://api.openai.com/v1/chat/completions"
         key_status = "FOUND" if self.api_key else "NOT_FOUND"
         print(f"[*] OpenAIClient initialized (Model: {model_name}, Key: {key_status})")
@@ -296,14 +343,15 @@ class OpenAIClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
         }
         if self.model_name.startswith(("o1", "o3", "gpt-5")):
             # Reasoning models use a large chunk of tokens for internal thinking
             # before writing output — so we need a large budget here.
-            data["max_completion_tokens"] = 4096
+            data["max_completion_tokens"] = self.max_completion_tokens
         else:
-            data["max_tokens"] = 256
-            data["temperature"] = 0.0
+            data["max_tokens"] = self.max_tokens
 
 
         max_retries = 5
@@ -364,92 +412,214 @@ class OpenAIClient(ModelClient):
 
         return "OpenAI Error: Max retries exceeded (rate limit)."
 
-class HuggingFaceClient(ModelClient):
-    """Client for Hugging Face Inference API using the official SDK."""
 
-    def __init__(self, api_key=None, model_name="Qwen/Qwen2.5-7B-Instruct"):
-        self.api_key = os.getenv("HUGGING_FACE_API_KEY")
+class CloudflareClient(ModelClient):
+    """Client for Cloudflare Workers AI (OpenAI-compatible endpoint)."""
+
+    def __init__(self, api_key=None, model_name=DEFAULT_CLOUDFLARE_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS):
+        self.api_key = api_key or os.getenv("CLOUDFLARE_API_TOKEN")
+        self.account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
         self.model_name = model_name
-        # Point the client specifically to the Hub's serverless OpenAI-compatible path
-        # This bypasses the unreliable Provider Router
-        self.client = InferenceClient(
-            api_key=self.api_key, 
-            base_url="https://router.huggingface.co/hf-inference/v1"
-        )
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.max_tokens = DEFAULT_MAX_TOKENS
+        self.url = f"https://api.cloudflare.com/client/v4/accounts/{self.account_id}/ai/v1/chat/completions"
         key_status = "FOUND" if self.api_key else "NOT_FOUND"
-        print(f"[*] HuggingFaceClient initialized (Model: {model_name}, Key: {key_status})")
+        acct_status = "FOUND" if self.account_id else "NOT_FOUND"
+        print(
+            f"[*] CloudflareClient initialized (Model: {model_name}, "
+            f"Token: {key_status}, Account ID: {acct_status})"
+        )
 
     def generate(self, prompt, system_prompt=None):
         if not self.api_key:
-            err = "Hugging Face Error: API Key not found. Please add HUGGING_FACE_API_KEY to your .env file."
+            err = "Cloudflare Error: API token not found. Please add CLOUDFLARE_API_TOKEN to your .env file."
             print(f"[!] {err}")
             return err
+
+        if not self.account_id:
+            err = "Cloudflare Error: Account ID not found. Please add CLOUDFLARE_ACCOUNT_ID to your .env file."
+            print(f"[!] {err}")
+            return err
+
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
 
         messages = []
         if system_prompt:
             messages.append({"role": "system", "content": system_prompt})
         messages.append({"role": "user", "content": prompt})
 
+        data = {
+            "model": self.model_name,
+            "messages": messages,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+        }
+
         max_retries = 5
         for attempt in range(max_retries):
             try:
-                print(f"[*] Sending request to Hugging Face ({self.model_name})...")
-                
-                # chat_completion handles the router or direct hub inference automatically
-                response = self.client.chat_completion(
-                    model=self.model_name,
-                    messages=messages,
-                    max_tokens=256,
-                    temperature=0.0,
-                )
-                
-                return response.choices[0].message.content
+                print(f"[*] Sending request to Cloudflare Workers AI ({self.model_name})...")
+                response = requests.post(self.url, json=data, headers=headers, timeout=180)
 
-            except Exception as e:
-                # Common errors handle
-                err_str = str(e)
-                if "429" in err_str or "rate limit" in err_str.lower():
-                    wait = 30.0 + (attempt * 15.0)
-                    print(f"[!] HF rate limited. Waiting {wait}s before retry {attempt+1}/{max_retries}...")
+                if response.status_code in {429, 500, 502, 503, 504}:
+                    try:
+                        error_msg = response.json().get("errors", [{}])[0].get("message", "Unknown Error")
+                    except Exception:
+                        error_msg = response.text or "Unknown Error"
+                    if "daily free allocation" in error_msg.lower() or "please upgrade" in error_msg.lower():
+                        print(f"[!] Cloudflare quota exhausted: {error_msg}")
+                        return f"Cloudflare Error: quota exhausted: {error_msg}"
+                    wait = float(response.headers.get("Retry-After", 10.0 + attempt * 10.0))
+                    print(
+                        f"[!] Cloudflare retryable error ({response.status_code}): {error_msg}. "
+                        f"Waiting {wait:.1f}s before retry {attempt + 1}/{max_retries}..."
+                    )
                     time.sleep(wait)
                     continue
 
-                if "503" in err_str or "loading" in err_str.lower():
-                    # Hub serverless models might be loading
-                    print("[*] HF Model is loading... waiting 25s")
-                    time.sleep(25)
+                if response.status_code != 200:
+                    try:
+                        error_msg = response.json().get("errors", [{}])[0].get("message", "Unknown Error")
+                    except Exception:
+                        error_msg = response.text or "Unknown Error"
+                    print(f"[!] Cloudflare API Error ({response.status_code}): {error_msg}")
+                    return f"Cloudflare Error: {error_msg}"
+
+                json_response = response.json()
+                choices = json_response.get("result", {}).get("choices", [])
+                if choices and choices[0].get("message"):
+                    return choices[0]["message"].get("content", "")
+                return "Cloudflare Error: No response content returned."
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                wait = 10.0 + attempt * 10.0
+                print(
+                    f"[!] Cloudflare connection error ({type(e).__name__}): {e}. "
+                    f"Waiting {wait:.1f}s before retry {attempt + 1}/{max_retries}..."
+                )
+                time.sleep(wait)
+                continue
+            except Exception as e:
+                print(f"[!] Cloudflare Client Exception: {e}")
+                return f"Cloudflare Error: {e}"
+
+        return "Cloudflare Error: Max retries exceeded (rate limit or transient API error)."
+
+
+class GitHubModelsClient(ModelClient):
+    """Client for GitHub Models API (OpenAI-compatible endpoint)."""
+
+    def __init__(self, api_key=None, model_name=DEFAULT_GITHUB_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS):
+        self.api_key = api_key or os.getenv("GITHUB_TOKEN") or os.getenv("GITHUB_MODELS_API_KEY")
+        self.model_name = model_name
+        self.temperature = DEFAULT_TEMPERATURE
+        self.top_p = DEFAULT_TOP_P
+        self.max_tokens = DEFAULT_MAX_TOKENS
+        self.url = "https://models.github.ai/inference/chat/completions"
+        key_status = "FOUND" if self.api_key else "NOT_FOUND"
+        print(f"[*] GitHubModelsClient initialized (Model: {model_name}, Token: {key_status})")
+
+    def generate(self, prompt, system_prompt=None):
+        if not self.api_key:
+            err = "GitHub Models Error: token not found. Please add GITHUB_TOKEN to your .env file."
+            print(f"[!] {err}")
+            return err
+
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json",
+        }
+
+        messages = []
+        if system_prompt:
+            messages.append({"role": "system", "content": system_prompt})
+        messages.append({"role": "user", "content": prompt})
+
+        data = {
+            "model": self.model_name,
+            "messages": messages,
+            "max_tokens": self.max_tokens,
+            "temperature": self.temperature,
+            "top_p": self.top_p,
+        }
+
+        max_retries = 8
+        for attempt in range(max_retries):
+            try:
+                print(f"[*] Sending request to GitHub Models ({self.model_name})...")
+                response = requests.post(self.url, json=data, headers=headers, timeout=180)
+
+                if response.status_code in {429, 500, 502, 503, 504}:
+                    try:
+                        error_msg = response.json().get("error", {}).get("message", "Unknown Error")
+                    except Exception:
+                        error_msg = response.text or "Unknown Error"
+                    retry_after = response.headers.get("Retry-After")
+                    wait = float(retry_after) if retry_after else min(180.0, 15.0 * (attempt + 1))
+                    if wait > 1800:
+                        print(
+                            f"[!] GitHub Models asked us to wait {wait:.1f}s. "
+                            "Stopping this request so the benchmark does not hang for hours."
+                        )
+                        return (
+                            "GitHub Models Error: Rate limit retry window is too long "
+                            f"({wait:.1f}s). Stop and rerun later or reduce request volume."
+                        )
+                    print(
+                        f"[!] GitHub Models retryable error ({response.status_code}): {error_msg}. "
+                        f"Waiting {wait:.1f}s before retry {attempt + 1}/{max_retries}..."
+                    )
+                    time.sleep(wait)
                     continue
 
-                # Fallback for Gemma if provider is disabled in router:
-                # Try putting :fastest if it's a 400
-                if "400" in err_str and "not supported" in err_str and ":" not in self.model_name:
-                    print(f"[*] Model {self.model_name} might need a provider suffix. Retrying as {self.model_name}:fastest...")
-                    self.model_name = f"{self.model_name}:fastest"
-                    continue
+                if response.status_code != 200:
+                    try:
+                        error_msg = response.json().get("error", {}).get("message", "Unknown Error")
+                    except Exception:
+                        error_msg = response.text or "Unknown Error"
+                    print(f"[!] GitHub Models API Error: {error_msg}")
+                    return f"GitHub Models Error: {error_msg}"
 
-                print(f"[!] Hugging Face Client Exception: {e}")
-                return f"Hugging Face Error: {e}"
+                json_response = response.json()
+                choices = json_response.get("choices", [])
+                if choices and choices[0].get("message"):
+                    return choices[0]["message"].get("content", "")
+                return "GitHub Models Error: No response content returned."
+            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
+                wait = min(120.0, 10.0 * (attempt + 1))
+                print(
+                    f"[!] GitHub Models connection error ({type(e).__name__}): {e}. "
+                    f"Waiting {wait:.1f}s before retry {attempt + 1}/{max_retries}..."
+                )
+                time.sleep(wait)
+                continue
+            except Exception as e:
+                print(f"[!] GitHub Models Client Exception: {e}")
+                return f"GitHub Models Error: {e}"
 
-        return "Hugging Face Error: Max retries exceeded (rate limit or loading)."
-
-
-        return "Hugging Face Error: Max retries exceeded (rate limit or loading)."
+        return "GitHub Models Error: Max retries exceeded (rate limit or transient API error)."
 
 
 def get_client(provider, **kwargs):
     provider = provider.lower()
     if provider == "ollama":
-        return OllamaClient(model_name=kwargs.get("model_name", "llama3.2"))
-    elif provider == "gemini":
-        return GeminiClient(model_name=kwargs.get("model_name", "gemini-1.5-flash"))
+        return OllamaClient(model_name=kwargs.get("model_name", DEFAULT_OLLAMA_MODEL))
+    elif provider in {"gemini", "google"}:
+        return GeminiClient(model_name=kwargs.get("model_name", DEFAULT_GEMINI_MODEL))
     elif provider == "groq":
-        return GroqClient(model_name=kwargs.get("model_name", "llama-3.1-8b-instant"))
+        return GroqClient(model_name=kwargs.get("model_name", DEFAULT_GROQ_MODEL))
     elif provider == "mistral":
-        return MistralClient(model_name=kwargs.get("model_name", "mistral-small-latest"))
-    elif provider == "huggingface":
-        return HuggingFaceClient(model_name=kwargs.get("model_name", "Qwen/Qwen2.5-7B-Instruct"))
+        return MistralClient(model_name=kwargs.get("model_name", DEFAULT_MISTRAL_MODEL))
     elif provider == "openai":
-        return OpenAIClient(model_name=kwargs.get("model_name", "gpt-4"))
+        return OpenAIClient(model_name=kwargs.get("model_name", DEFAULT_OPENAI_MODEL))
+    elif provider == "cloudflare":
+        return CloudflareClient(model_name=kwargs.get("model_name", DEFAULT_CLOUDFLARE_MODEL))
+    elif provider == "github":
+        return GitHubModelsClient(model_name=kwargs.get("model_name", DEFAULT_GITHUB_MODEL))
     else:
         raise ValueError(f"Unknown provider: {provider}")
 

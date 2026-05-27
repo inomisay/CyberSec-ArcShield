@@ -1,0 +1,42 @@
+{
+  "project_root": "PromptEngInCyberSec",
+  "source_record_count": 49571,
+  "sampled_record_count": 3200,
+  "per_type_target": 200,
+  "attack_type_counts": {
+    "Direct Exploitation": 2494,
+    "Jailbreaks": 19844,
+    "Prompt Injection": 166,
+    "Indirect Injection": 3633,
+    "Role Playing / Pretending": 3788,
+    "Attention Shifting": 619,
+    "Logic Trap Attacks": 1455,
+    "Hypothetical Manipulation": 461,
+    "Accidental Context Leakage": 1213,
+    "Code Injection": 9234,
+    "Dictionary Attack": 183,
+    "Fill-in-the-Blank Attack": 2721,
+    "Multi-Language Attack": 3504,
+    "Multi-Prompt Attack": 51,
+    "Obfuscation (Token Smuggling)": 126,
+    "Payload Splitting": 79
+  },
+  "sampled_attack_type_counts": {
+    "Direct Exploitation": 200,
+    "Jailbreaks": 200,
+    "Prompt Injection": 200,
+    "Indirect Injection": 200,
+    "Role Playing / Pretending": 200,
+    "Attention Shifting": 200,
+    "Logic Trap Attacks": 200,
+    "Hypothetical Manipulation": 200,
+    "Accidental Context Leakage": 200,
+    "Code Injection": 200,
+    "Dictionary Attack": 200,
+    "Fill-in-the-Blank Attack": 200,
+    "Multi-Language Attack": 200,
+    "Multi-Prompt Attack": 200,
+    "Obfuscation (Token Smuggling)": 200,
+    "Payload Splitting": 200
+  }
+}
