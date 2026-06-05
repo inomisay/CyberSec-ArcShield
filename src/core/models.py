@@ -37,7 +37,19 @@ class OllamaClient(ModelClient):
         self.top_p = DEFAULT_TOP_P
         self.top_k = top_k
         self.max_tokens = DEFAULT_MAX_TOKENS
+        self.timeout = float(os.getenv("OLLAMA_TIMEOUT", "120"))
+        self.think = self._resolve_thinking_mode(model_name)
         self.quantization = DEFAULT_OLLAMA_QUANTIZATION if model_name == DEFAULT_OLLAMA_MODEL else "unknown"
+
+    @staticmethod
+    def _resolve_thinking_mode(model_name):
+        configured = os.getenv("OLLAMA_THINK")
+        if configured is not None:
+            return configured.strip().lower() in {"1", "true", "yes", "on"}
+        lowered = str(model_name).lower()
+        if "qwen3" in lowered or "deepseek-r1" in lowered:
+            return False
+        return None
 
     def generate(self, prompt, system_prompt=None):
         # Prepend system prompt for simple models or use 'system' field if supported
@@ -54,11 +66,14 @@ class OllamaClient(ModelClient):
                 "top_k": self.top_k,
             }
         }
+        if self.think is not None:
+            data["think"] = self.think
         
         try:
-            response = requests.post(self.url, json=data, timeout=120)
+            response = requests.post(self.url, json=data, timeout=self.timeout)
             response.raise_for_status()
-            return response.json().get("response", "")
+            result = response.json()
+            return result.get("response", "") or result.get("thinking", "")
         except Exception as e:
             return f"Ollama Error: {e}"
 
@@ -109,9 +124,24 @@ class GeminiClient(ModelClient):
 
                 # 429: Rate Limit
                 if response.status_code == 429:
-                    error_msg = response.json().get('error', {}).get('message', '')
-                    match = re.search(r'retry in ([\d.]+)s', error_msg)
-                    wait = float(match.group(1)) + 5 if match else 20
+                    try:
+                        error_payload = response.json()
+                    except Exception:
+                        error_payload = {}
+                    error_msg = error_payload.get('error', {}).get('message', response.text or '')
+                    retry_delay = None
+                    for detail in error_payload.get('error', {}).get('details', []):
+                        retry_delay = detail.get('retryDelay')
+                        if retry_delay:
+                            break
+                    match = re.search(r'retry in ([\d.]+)s', error_msg, re.IGNORECASE)
+                    delay_match = re.match(r'([\d.]+)s$', str(retry_delay or ''))
+                    if delay_match:
+                        wait = float(delay_match.group(1)) + 5
+                    elif match:
+                        wait = float(match.group(1)) + 5
+                    else:
+                        wait = 60 + (attempt * 30)
                     print(f"[!] Rate limited. Waiting {wait:.1f}s before retry {attempt+1}/{max_retries}...")
                     time.sleep(wait)
                     continue
@@ -137,9 +167,24 @@ class GeminiClient(ModelClient):
 
                 json_response = response.json()
                 if 'candidates' in json_response and json_response['candidates']:
-                    return json_response['candidates'][0]['content']['parts'][0]['text']
-                else:
-                    return "Gemini Error: No response content returned."
+                    candidate = json_response['candidates'][0]
+                    content = candidate.get('content') or {}
+                    parts = content.get('parts') or []
+                    if parts and parts[0].get('text'):
+                        return parts[0]['text']
+                    finish_reason = candidate.get("finishReason", "unknown")
+                    safety_ratings = candidate.get("safetyRatings", [])
+                    return (
+                        "Gemini Safety Block: no response content returned "
+                        f"(finish_reason={finish_reason}, safety_ratings={safety_ratings})"
+                    )
+                prompt_feedback = json_response.get("promptFeedback", {})
+                block_reason = prompt_feedback.get("blockReason", "unknown")
+                safety_ratings = prompt_feedback.get("safetyRatings", [])
+                return (
+                    "Gemini Safety Block: no response content returned "
+                    f"(block_reason={block_reason}, safety_ratings={safety_ratings})"
+                )
 
             except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
                 print(f"[!] Gemini Connection Exception ({type(e).__name__}): {e}. Retrying {attempt+1}/{max_retries}...")
@@ -184,8 +229,6 @@ class GroqClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
             # Keep responses compact to reduce TPM pressure during benchmark loops.
             "max_tokens": self.max_tokens,
         }
@@ -262,8 +305,6 @@ class MistralClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
             "max_tokens": self.max_tokens,
         }
 
@@ -334,7 +375,8 @@ class OpenAIClient(ModelClient):
 
         messages = []
         # Newer models prefer 'developer' role over 'system' or strictly only 'user'
-        system_role = "developer" if self.model_name.startswith(("o1", "o3", "gpt-5")) else "system"
+        is_reasoning_model = self.model_name.startswith(("o1", "o3", "gpt-5"))
+        system_role = "developer" if is_reasoning_model else "system"
         
         if system_prompt:
             messages.append({"role": system_role, "content": system_prompt})
@@ -343,14 +385,15 @@ class OpenAIClient(ModelClient):
         data = {
             "model": self.model_name,
             "messages": messages,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
         }
-        if self.model_name.startswith(("o1", "o3", "gpt-5")):
+        if is_reasoning_model:
+            data["reasoning_effort"] = "minimal"
             # Reasoning models use a large chunk of tokens for internal thinking
             # before writing output — so we need a large budget here.
             data["max_completion_tokens"] = self.max_completion_tokens
         else:
+            data["temperature"] = self.temperature
+            data["top_p"] = self.top_p
             data["max_tokens"] = self.max_tokens
 
 
@@ -401,8 +444,10 @@ class OpenAIClient(ModelClient):
                         return content
                     if refusal:
                         return f"Model Refusal: {refusal}"
-                    
-                    return ""
+
+                    finish_reason = choices[0].get("finish_reason", "unknown")
+                    usage = json_response.get("usage", {})
+                    return f"OpenAI Error: empty response content returned (finish_reason={finish_reason}, usage={usage})"
                 
                 print(f"[!] OpenAI Error: Unexpected JSON structure: {json_response}")
                 return "OpenAI Error: No response content returned."
@@ -491,10 +536,16 @@ class CloudflareClient(ModelClient):
                     return f"Cloudflare Error: {error_msg}"
 
                 json_response = response.json()
-                choices = json_response.get("result", {}).get("choices", [])
+                result = json_response.get("result", {})
+                choices = result.get("choices") or json_response.get("choices", [])
                 if choices and choices[0].get("message"):
-                    return choices[0]["message"].get("content", "")
-                return "Cloudflare Error: No response content returned."
+                    message = choices[0]["message"]
+                    return message.get("content") or message.get("reasoning_content") or ""
+                if result.get("response"):
+                    return result.get("response", "")
+                if result.get("text"):
+                    return result.get("text", "")
+                return f"Cloudflare Error: No response content returned. Response shape: {json_response}"
             except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
                 wait = 10.0 + attempt * 10.0
                 print(
@@ -587,7 +638,17 @@ class GitHubModelsClient(ModelClient):
                 json_response = response.json()
                 choices = json_response.get("choices", [])
                 if choices and choices[0].get("message"):
-                    return choices[0]["message"].get("content", "")
+                    choice = choices[0]
+                    message = choice["message"]
+                    content = message.get("content") or message.get("reasoning_content") or ""
+                    if str(content).strip():
+                        return content
+                    finish_reason = choice.get("finish_reason") or "unknown"
+                    return (
+                        "GitHub Models Error: Response may have been filtered, spent on hidden "
+                        "reasoning, or blocked by provider policy. "
+                        f"Empty response content returned (finish_reason={finish_reason})."
+                    )
                 return "GitHub Models Error: No response content returned."
             except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
                 wait = min(120.0, 10.0 * (attempt + 1))

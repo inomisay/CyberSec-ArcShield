@@ -10,6 +10,7 @@ from __future__ import annotations
 import argparse
 import csv
 import json
+import os
 import re
 import time
 from datetime import UTC, datetime
@@ -54,7 +55,7 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
 
 def is_provider_error(row: dict[str, Any]) -> bool:
     response = str(row.get("model_response", ""))
-    return bool(row.get("error")) or any(
+    return bool(row.get("error")) or not response.strip() or any(
         marker in response
         for marker in [
             "Provider Error:",
@@ -69,14 +70,111 @@ def is_provider_error(row: dict[str, Any]) -> bool:
     )
 
 
-def load_resume_rows(path: Path) -> list[dict[str, Any]]:
+def is_provider_policy_filter(row: dict[str, Any]) -> bool:
+    response = str(row.get("model_response", ""))
+    error = str(row.get("error", ""))
+    text = f"{response}\n{error}".lower()
+    return (
+        "content management policy" in text
+        or "finish_reason=content_filter" in text
+        or "provider policy" in text
+        or "response was filtered" in text
+    )
+
+
+def provider_error_result(
+    execution: dict[str, Any],
+    *,
+    args: argparse.Namespace,
+    model_name: str,
+    provider: str,
+    condition_name: str,
+    condition: dict[str, Any],
+    row: dict[str, Any],
+    run_id: str,
+    index: int,
+) -> dict[str, Any]:
+    response = str(execution.get("model_response", "")).strip()
+    reason = response or str(execution.get("error", "")).strip() or "Provider returned no response."
+    return {
+        "final_label": "PROVIDER_ERROR",
+        "confidence_score": 0.0,
+        "refusal_detected": False,
+        "harmful_content_detected": False,
+        "partial_compliance": False,
+        "attack_success": False,
+        "defense_success": False,
+        "severity_score": "UNKNOWN",
+        "judge_reason": f"Provider blocked or failed before the model could produce a usable answer: {reason}",
+        "attack_type": f"Benign/{row.get('benign_category', 'unknown')}",
+        "model_name": model_name,
+        "run_id": run_id,
+        "timestamp": execution["inference_timestamp"],
+        "defense_enabled": condition["defense_enabled"],
+        "is_synthetic": None,
+        "evaluator_name": "provider_error_skip",
+        "llama_guard_label": None,
+        "llama_guard_detected_harm": False,
+        "dangerous_rule_match": False,
+        "rule_categories": {},
+        "safety_category": "provider_error",
+        "defense_layer_outputs": {"system_prompt_hardening": condition["system_prompt_hardening"]},
+        "seed": args.seed,
+        "temperature": args.temperature,
+        "top_p": args.top_p,
+        "max_tokens": args.max_tokens,
+        "latency_ms": execution["latency_ms"],
+        "prompt_tokens": execution["prompt_tokens"],
+        "completion_tokens": execution["completion_tokens"],
+        "context_tokens": execution["context_tokens"],
+        "model_version": model_name,
+        "inference_provider": provider,
+        "defense_config": condition_name,
+        **execution,
+        "prompt_kind": "benign",
+        "benign_category": row.get("benign_category"),
+        "benign_label": row.get("label", "benign"),
+        "prompt_id": row.get("prompt_id"),
+        "prompt": row.get("prompt", ""),
+        "condition": condition_name,
+        "prompt_index": index,
+        "over_refusal": False,
+        "valid_attack_blocking": False,
+        "overblocking": False,
+    }
+
+
+def is_likely_cutoff(row: dict[str, Any], strict: bool = False) -> bool:
+    response = str(row.get("model_response", "")).strip()
+    if not response or is_provider_error(row):
+        return False
+
+    output_tokens = int(row.get("output_tokens") or row.get("completion_tokens") or 0)
+    max_tokens = int(row.get("max_tokens") or 0)
+    hit_token_ceiling = max_tokens > 0 and output_tokens >= max_tokens - 2
+    unclosed_reasoning = bool(re.search(r"<think>", response, re.IGNORECASE)) and not bool(
+        re.search(r"</think>", response, re.IGNORECASE)
+    )
+    unclosed_code_fence = response.count("```") % 2 == 1
+    unfinished_sentence = len(response) > 80 and not re.search(r"[.!?;)\]'\"`]\s*$", response)
+
+    hard_cutoff = hit_token_ceiling or unclosed_reasoning or unclosed_code_fence
+    return hard_cutoff if strict else hard_cutoff or unfinished_sentence
+
+
+def load_resume_rows(path: Path, retry_cutoffs: bool = False, strict_cutoffs: bool = False) -> list[dict[str, Any]]:
     if not path.exists():
         return []
     try:
         rows = json.loads(path.read_text(encoding="utf-8"))
     except Exception:
         return []
-    return [dict(row) for row in rows if not is_provider_error(dict(row))]
+    return [
+        dict(row)
+        for row in rows
+        if (not is_provider_error(dict(row)) or is_provider_policy_filter(dict(row)))
+        and not ((retry_cutoffs or strict_cutoffs) and is_likely_cutoff(dict(row), strict=strict_cutoffs))
+    ]
 
 
 def benign_metrics(rows: list[dict[str, Any]], group_by: list[str] | None = None) -> list[dict[str, Any]]:
@@ -151,8 +249,12 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
     rows = balanced_sample(load_benign_dataset(args.dataset), sample_size=args.limit, seed=args.seed)
     run_id = args.run_id or f"benign_eval_{datetime.now(UTC).strftime('%Y%m%d_%H%M%S')}"
     provider, model_name = parse_model_spec(args.model)
+    if args.model_timeout is not None and provider == "ollama":
+        os.environ["OLLAMA_TIMEOUT"] = str(args.model_timeout)
     model_slug = slugify(args.model)
-    base_output = Path(args.output_dir) / run_id / model_slug / "benign_usability"
+    run_stamp = run_id.rsplit("_", 2)[-2:]
+    dated_eval_slug = f"benign_usability_{'_'.join(run_stamp)}" if len(run_stamp) == 2 else f"benign_usability_{run_id}"
+    base_output = Path(args.output_dir) / model_slug / dated_eval_slug
 
     client = get_attack_client(args.model, temperature=args.temperature, top_p=args.top_p, max_tokens=args.max_tokens)
     judge = BenchmarkJudge(judge_config={"llama_guard_model": args.llama_guard_model, "timeout": args.llama_guard_timeout})
@@ -188,7 +290,11 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
         condition_rows: list[dict[str, Any]] = []
         completed_indices: set[int] = set()
         if args.resume:
-            condition_rows = load_resume_rows(condition_output / "benign_results.json")
+            condition_rows = load_resume_rows(
+                condition_output / "benign_results.json",
+                retry_cutoffs=args.retry_cutoffs,
+                strict_cutoffs=args.retry_hard_cutoffs,
+            )
             completed_indices = {int(row["prompt_index"]) for row in condition_rows if str(row.get("prompt_index", "")).isdigit()}
             all_results.extend(condition_rows)
             if condition_rows:
@@ -210,45 +316,58 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
                 top_p=args.top_p,
                 max_tokens=args.max_tokens,
             )
-            verdict = judge.judge(
-                JudgeInput(
-                    prompt=prompt_text,
-                    attack_type=f"Benign/{row.get('benign_category', 'unknown')}",
+            if is_provider_error(execution):
+                result = provider_error_result(
+                    execution,
+                    args=args,
                     model_name=model_name,
-                    model_response=execution["model_response"],
-                    defense_enabled=condition["defense_enabled"],
-                    defense_layer_outputs={"system_prompt_hardening": condition["system_prompt_hardening"]},
+                    provider=provider,
+                    condition_name=condition_name,
+                    condition=condition,
+                    row=row,
                     run_id=run_id,
-                    seed=args.seed,
-                    timestamp=execution["inference_timestamp"],
-                    temperature=args.temperature,
-                    top_p=args.top_p,
-                    max_tokens=args.max_tokens,
-                    model_version=model_name,
-                    inference_provider=provider,
-                    defense_config=condition_name,
-                    latency_ms=execution["latency_ms"],
-                    prompt_tokens=execution["prompt_tokens"],
-                    completion_tokens=execution["completion_tokens"],
-                    context_tokens=execution["context_tokens"],
+                    index=index,
                 )
-            )
-            result = verdict.to_dict()
-            result.update(
-                {
-                    **execution,
-                    "prompt_kind": "benign",
-                    "benign_category": row.get("benign_category"),
-                    "benign_label": row.get("label", "benign"),
-                    "prompt_id": row.get("prompt_id"),
-                    "prompt": prompt_text,
-                    "condition": condition_name,
-                    "prompt_index": index,
-                    "over_refusal": bool(verdict.refusal_detected),
-                    "valid_attack_blocking": False,
-                    "overblocking": bool(verdict.refusal_detected),
-                }
-            )
+            else:
+                verdict = judge.judge(
+                    JudgeInput(
+                        prompt=prompt_text,
+                        attack_type=f"Benign/{row.get('benign_category', 'unknown')}",
+                        model_name=model_name,
+                        model_response=execution["model_response"],
+                        defense_enabled=condition["defense_enabled"],
+                        defense_layer_outputs={"system_prompt_hardening": condition["system_prompt_hardening"]},
+                        run_id=run_id,
+                        seed=args.seed,
+                        timestamp=execution["inference_timestamp"],
+                        temperature=args.temperature,
+                        top_p=args.top_p,
+                        max_tokens=args.max_tokens,
+                        model_version=model_name,
+                        inference_provider=provider,
+                        defense_config=condition_name,
+                        latency_ms=execution["latency_ms"],
+                        prompt_tokens=execution["prompt_tokens"],
+                        completion_tokens=execution["completion_tokens"],
+                        context_tokens=execution["context_tokens"],
+                    )
+                )
+                result = verdict.to_dict()
+                result.update(
+                    {
+                        **execution,
+                        "prompt_kind": "benign",
+                        "benign_category": row.get("benign_category"),
+                        "benign_label": row.get("label", "benign"),
+                        "prompt_id": row.get("prompt_id"),
+                        "prompt": prompt_text,
+                        "condition": condition_name,
+                        "prompt_index": index,
+                        "over_refusal": bool(verdict.refusal_detected),
+                        "valid_attack_blocking": False,
+                        "overblocking": bool(verdict.refusal_detected),
+                    }
+                )
             condition_rows.append(result)
             all_results.append(result)
             if index % args.save_every == 0 or index == len(rows):
@@ -303,9 +422,25 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--max-tokens", type=int, default=512)
     parser.add_argument("--llama-guard-model", default="llama-guard3")
     parser.add_argument("--llama-guard-timeout", type=int, default=120)
+    parser.add_argument(
+        "--model-timeout",
+        type=float,
+        default=None,
+        help="Target model request timeout in seconds. Currently used by local Ollama via OLLAMA_TIMEOUT.",
+    )
     parser.add_argument("--save-every", type=int, default=10)
     parser.add_argument("--request-delay", type=float, default=0.0, help="Seconds to sleep between target model requests.")
     parser.add_argument("--resume", action="store_true", help="Reuse existing successful rows for the same run id and retry missing/error rows.")
+    parser.add_argument(
+        "--retry-cutoffs",
+        action="store_true",
+        help="With --resume, also retry rows whose saved response looks truncated or unfinished.",
+    )
+    parser.add_argument(
+        "--retry-hard-cutoffs",
+        action="store_true",
+        help="With --resume, retry only clearly broken rows, such as token-ceiling hits or unclosed code/reasoning blocks.",
+    )
     return parser.parse_args()
 
 

@@ -1,0 +1,347 @@
+# ArcShield local Ollama command templates
+#
+# Local models:
+# - ollama:llama3.1:8b
+# - ollama:qwen3:latest
+# - ollama:deepseek-r1:latest
+# - ollama:phi4:latest
+# - ollama:mistral:latest
+# - ollama:gemma3:latest
+#
+# These are first-run commands for missing local runs. Cleanup flags such as
+# --resume and --retry-hard-cutoffs are intentionally omitted from first-run
+# commands. Use the repair pattern at the bottom only after a run exists.
+#
+# Outputs are saved under:
+# output/model_results/<model_slug>/<run_slug>/
+
+====================
+RUN STATUS
+====================
+
+ollama:llama3.1:8b
+- Benign exists: benign_usability_20260524_054505
+- Existing attacks: Direct Exploitation, Jailbreaks, Prompt Injection,
+  Indirect Injection, Role Playing / Pretending, Attention Shifting,
+  Logic Trap Attacks, Hypothetical Manipulation, Accidental Context Leakage,
+  Code Injection, Dictionary Attack, Fill-in-the-Blank Attack
+- Missing attacks: Multi-Language Attack, Multi-Prompt Attack,
+  Obfuscation (Token Smuggling), Payload Splitting
+
+ollama:qwen3:latest
+- Benign exists: benign_usability_20260530_175322
+- Existing attacks: none
+- Missing attacks: all attack types below
+
+ollama:deepseek-r1:latest
+- Benign exists: none
+- Existing attacks: none
+- Missing attacks: all attack types below
+
+ollama:phi4:latest
+- Benign exists: none
+- Existing attacks: none
+- Missing attacks: all attack types below
+
+ollama:mistral:latest
+- Benign exists: none
+- Existing attacks: none
+- Missing attacks: all attack types below
+
+ollama:gemma3:latest
+- Benign exists: none
+- Existing attacks: none
+- Missing attacks: all attack types below
+
+====================
+BENIGN FIRST-RUN COMMANDS FOR MODELS WITHOUT BENIGN RESULTS
+====================
+
+DeepSeek R1:
+python -m src.evaluation.run_benign_experiment --model ollama:deepseek-r1:latest --condition both --save-every 1 --max-tokens 512
+
+Phi-4:
+python -m src.evaluation.run_benign_experiment --model ollama:phi4:latest --condition both --save-every 1 --max-tokens 512
+
+Mistral:
+python -m src.evaluation.run_benign_experiment --model ollama:mistral:latest --condition both --save-every 1 --max-tokens 512
+
+Gemma 3:
+python -m src.evaluation.run_benign_experiment --model ollama:gemma3:latest --condition both --save-every 1 --max-tokens 512
+
+====================
+OLLAMA LLAMA 3.1 8B MISSING ATTACK RUNS
+====================
+
+Obfuscation (Token Smuggling):
+python -m src.evaluation.run_attack_type_experiment --model ollama:llama3.1:8b --attack-type "Obfuscation (Token Smuggling)" --condition both --save-every 1 --max-tokens 512
+
+Payload Splitting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:llama3.1:8b --attack-type "Payload Splitting" --condition both --save-every 1 --max-tokens 512
+
+====================
+OLLAMA QWEN3 EXPANDED ATTACK COMMANDS
+====================
+
+Direct Exploitation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Direct Exploitation" --condition both --save-every 1 --max-tokens 512
+
+Jailbreaks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Jailbreaks" --condition both --save-every 1 --max-tokens 512
+
+Prompt Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Prompt Injection" --condition both --save-every 1 --max-tokens 512
+
+Indirect Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Indirect Injection" --condition both --save-every 1 --max-tokens 512
+
+Role Playing / Pretending:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Role Playing / Pretending" --condition both --save-every 1 --max-tokens 512
+
+Attention Shifting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Attention Shifting" --condition both --save-every 1 --max-tokens 512
+
+Logic Trap Attacks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Logic Trap Attacks" --condition both --save-every 1 --max-tokens 512
+
+Hypothetical Manipulation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Hypothetical Manipulation" --condition both --save-every 1 --max-tokens 512
+
+Accidental Context Leakage:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Accidental Context Leakage" --condition both --save-every 1 --max-tokens 512
+
+Code Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Code Injection" --condition both --save-every 1 --max-tokens 512
+
+Dictionary Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Dictionary Attack" --condition both --save-every 1 --max-tokens 512
+
+Fill-in-the-Blank Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Fill-in-the-Blank Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Language Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Multi-Language Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Prompt Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Multi-Prompt Attack" --condition both --save-every 1 --max-tokens 512
+
+Obfuscation (Token Smuggling):
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Obfuscation (Token Smuggling)" --condition both --save-every 1 --max-tokens 512
+
+Payload Splitting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Payload Splitting" --condition both --save-every 1 --max-tokens 512
+
+====================
+OLLAMA DEEPSEEK R1 EXPANDED ATTACK COMMANDS
+====================
+
+Direct Exploitation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Direct Exploitation" --condition both --save-every 1 --max-tokens 512
+
+Jailbreaks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Jailbreaks" --condition both --save-every 1 --max-tokens 512
+
+Prompt Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Prompt Injection" --condition both --save-every 1 --max-tokens 512
+
+Indirect Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Indirect Injection" --condition both --save-every 1 --max-tokens 512
+
+Role Playing / Pretending:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Role Playing / Pretending" --condition both --save-every 1 --max-tokens 512
+
+Attention Shifting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Attention Shifting" --condition both --save-every 1 --max-tokens 512
+
+Logic Trap Attacks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Logic Trap Attacks" --condition both --save-every 1 --max-tokens 512
+
+Hypothetical Manipulation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Hypothetical Manipulation" --condition both --save-every 1 --max-tokens 512
+
+Accidental Context Leakage:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Accidental Context Leakage" --condition both --save-every 1 --max-tokens 512
+
+Code Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Code Injection" --condition both --save-every 1 --max-tokens 512
+
+Dictionary Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Dictionary Attack" --condition both --save-every 1 --max-tokens 512
+
+Fill-in-the-Blank Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Fill-in-the-Blank Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Language Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Multi-Language Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Prompt Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Multi-Prompt Attack" --condition both --save-every 1 --max-tokens 512
+
+Obfuscation (Token Smuggling):
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Obfuscation (Token Smuggling)" --condition both --save-every 1 --max-tokens 512
+
+Payload Splitting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:deepseek-r1:latest --attack-type "Payload Splitting" --condition both --save-every 1 --max-tokens 512
+
+====================
+OLLAMA PHI-4 EXPANDED ATTACK COMMANDS
+====================
+
+Direct Exploitation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Direct Exploitation" --condition both --save-every 1 --max-tokens 512
+
+Jailbreaks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Jailbreaks" --condition both --save-every 1 --max-tokens 512
+
+Prompt Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Prompt Injection" --condition both --save-every 1 --max-tokens 512
+
+Indirect Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Indirect Injection" --condition both --save-every 1 --max-tokens 512
+
+Role Playing / Pretending:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Role Playing / Pretending" --condition both --save-every 1 --max-tokens 512
+
+Attention Shifting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Attention Shifting" --condition both --save-every 1 --max-tokens 512
+
+Logic Trap Attacks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Logic Trap Attacks" --condition both --save-every 1 --max-tokens 512
+
+Hypothetical Manipulation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Hypothetical Manipulation" --condition both --save-every 1 --max-tokens 512
+
+Accidental Context Leakage:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Accidental Context Leakage" --condition both --save-every 1 --max-tokens 512
+
+Code Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Code Injection" --condition both --save-every 1 --max-tokens 512
+
+Dictionary Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Dictionary Attack" --condition both --save-every 1 --max-tokens 512
+
+Fill-in-the-Blank Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Fill-in-the-Blank Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Language Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Multi-Language Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Prompt Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Multi-Prompt Attack" --condition both --save-every 1 --max-tokens 512
+
+Obfuscation (Token Smuggling):
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Obfuscation (Token Smuggling)" --condition both --save-every 1 --max-tokens 512
+
+Payload Splitting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:phi4:latest --attack-type "Payload Splitting" --condition both --save-every 1 --max-tokens 512
+
+====================
+OLLAMA MISTRAL EXPANDED ATTACK COMMANDS
+====================
+
+Direct Exploitation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Direct Exploitation" --condition both --save-every 1 --max-tokens 512
+
+Jailbreaks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Jailbreaks" --condition both --save-every 1 --max-tokens 512
+
+Prompt Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Prompt Injection" --condition both --save-every 1 --max-tokens 512
+
+Indirect Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Indirect Injection" --condition both --save-every 1 --max-tokens 512
+
+Role Playing / Pretending:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Role Playing / Pretending" --condition both --save-every 1 --max-tokens 512
+
+Attention Shifting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Attention Shifting" --condition both --save-every 1 --max-tokens 512
+
+Logic Trap Attacks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Logic Trap Attacks" --condition both --save-every 1 --max-tokens 512
+
+Hypothetical Manipulation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Hypothetical Manipulation" --condition both --save-every 1 --max-tokens 512
+
+Accidental Context Leakage:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Accidental Context Leakage" --condition both --save-every 1 --max-tokens 512
+
+Code Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Code Injection" --condition both --save-every 1 --max-tokens 512
+
+Dictionary Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Dictionary Attack" --condition both --save-every 1 --max-tokens 512
+
+Fill-in-the-Blank Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Fill-in-the-Blank Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Language Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Multi-Language Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Prompt Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Multi-Prompt Attack" --condition both --save-every 1 --max-tokens 512
+
+Obfuscation (Token Smuggling):
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Obfuscation (Token Smuggling)" --condition both --save-every 1 --max-tokens 512
+
+Payload Splitting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Payload Splitting" --condition both --save-every 1 --max-tokens 512
+
+====================
+OLLAMA GEMMA3 EXPANDED ATTACK COMMANDS
+====================
+
+Direct Exploitation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Direct Exploitation" --condition both --save-every 1 --max-tokens 512
+
+Jailbreaks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Jailbreaks" --condition both --save-every 1 --max-tokens 512
+
+Prompt Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Prompt Injection" --condition both --save-every 1 --max-tokens 512
+
+Indirect Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Indirect Injection" --condition both --save-every 1 --max-tokens 512
+
+Role Playing / Pretending:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Role Playing / Pretending" --condition both --save-every 1 --max-tokens 512
+
+Attention Shifting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Attention Shifting" --condition both --save-every 1 --max-tokens 512
+
+Logic Trap Attacks:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Logic Trap Attacks" --condition both --save-every 1 --max-tokens 512
+
+Hypothetical Manipulation:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Hypothetical Manipulation" --condition both --save-every 1 --max-tokens 512
+
+Accidental Context Leakage:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Accidental Context Leakage" --condition both --save-every 1 --max-tokens 512
+
+Code Injection:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Code Injection" --condition both --save-every 1 --max-tokens 512
+
+Dictionary Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Dictionary Attack" --condition both --save-every 1 --max-tokens 512
+
+Fill-in-the-Blank Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Fill-in-the-Blank Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Language Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Multi-Language Attack" --condition both --save-every 1 --max-tokens 512
+
+Multi-Prompt Attack:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Multi-Prompt Attack" --condition both --save-every 1 --max-tokens 512
+
+Obfuscation (Token Smuggling):
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Obfuscation (Token Smuggling)" --condition both --save-every 1 --max-tokens 512
+
+Payload Splitting:
+python -m src.evaluation.run_attack_type_experiment --model ollama:gemma3:latest --attack-type "Payload Splitting" --condition both --save-every 1 --max-tokens 512
+
+====================
+AFTER A RUN IS INTERRUPTED
+====================
+
+# Resume/repair pattern for an existing run:
+# python -m src.evaluation.run_attack_type_experiment --model <MODEL> --attack-type "<ATTACK_TYPE>" --condition both --run-id <RUN_ID> --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512

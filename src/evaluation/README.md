@@ -50,6 +50,35 @@ List valid attack type names:
 python -m src.evaluation.run_attack_type_experiment --list-attack-types
 ```
 
+## Resume And Cleanup
+
+Use `--resume` to continue an existing run without repeating successful rows.
+Pass the original `--run-id` so the command writes to the same output folder:
+
+```powershell
+python -m src.evaluation.run_attack_type_experiment --model groq:llama-3.1-8b-instant --attack-type "Jailbreaks" --condition both --run-id single_attack_20260526_182634 --resume --save-every 1
+```
+
+For minimal cleanup, use `--retry-hard-cutoffs` with `--resume`. This retries
+only rows that are clearly broken, such as provider errors, empty responses,
+token-ceiling hits, unclosed code fences, or unclosed reasoning tags:
+
+```powershell
+python -m src.evaluation.run_attack_type_experiment --model groq:llama-3.1-8b-instant --attack-type "Jailbreaks" --condition both --run-id single_attack_20260526_182634 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
+```
+
+For benign runs, prefer `--retry-hard-cutoffs` if cleanup is needed:
+
+```powershell
+python -m src.evaluation.run_benign_experiment --model groq:llama-3.1-8b-instant --condition both --run-id benign_eval_20260526_204104 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
+```
+
+Avoid `--retry-cutoffs` for normal benign cleanup. It is intentionally
+aggressive and also retries rows that merely look unfinished, such as answers
+ending without punctuation. That can cause most benign rows to be rerun even
+when the BRR/refusal judgment is already usable. Use it only when you
+intentionally want text-quality cleanup instead of minimal data repair.
+
 ## Output Layout
 
 Default output:

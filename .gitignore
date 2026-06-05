@@ -111,6 +111,8 @@ venv.bak/
 logs/
 output/
 commands/
+!src/evaluation/commands/
+!src/evaluation/commands/*.txt
 dataset/Datasets.txt
 !logs/README.md
 provider_comparison_plots/
