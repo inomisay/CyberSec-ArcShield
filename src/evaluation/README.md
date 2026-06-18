@@ -35,13 +35,13 @@ python -m src.evaluation.run_attack_type_experiment --model google:gemini-flash-
 Run only the baseline:
 
 ```powershell
-python -m src.evaluation.run_attack_type_experiment --model github:Phi-4 --attack-type "Jailbreaks" --condition no_defense
+python -m src.evaluation.run_attack_type_experiment --model google:gemini-flash-lite-latest --attack-type "Jailbreaks" --condition no_defense
 ```
 
 Run only ArcShield defense:
 
 ```powershell
-python -m src.evaluation.run_attack_type_experiment --model github:Phi-4 --attack-type "Jailbreaks" --condition arcshield
+python -m src.evaluation.run_attack_type_experiment --model google:gemini-flash-lite-latest --attack-type "Jailbreaks" --condition arcshield
 ```
 
 List valid attack type names:

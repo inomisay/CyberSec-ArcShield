@@ -3,7 +3,7 @@
 Examples:
   python -m src.evaluation.run_attack_type_experiment --list-attack-types
   python -m src.evaluation.run_attack_type_experiment --model google:gemini-flash-lite-latest --attack-type "Prompt Injection" --condition both --limit 5
-  python -m src.evaluation.run_attack_type_experiment --model github:Phi-4 --attack-type "Jailbreaks" --condition no_defense
+  python -m src.evaluation.run_attack_type_experiment --model google:gemini-flash-lite-latest --attack-type "Jailbreaks" --condition no_defense
 
 Recommended process for online models:
   1. Start with --limit 5 to verify keys, model name, and output paths.
@@ -93,7 +93,6 @@ def is_provider_error(row: dict[str, Any]) -> bool:
             "Mistral Error:",
             "OpenAI Error:",
             "Cloudflare Error:",
-            "GitHub Models Error:",
         ]
     )
 

@@ -65,7 +65,6 @@ def is_provider_error(row: dict[str, Any]) -> bool:
             "Mistral Error:",
             "OpenAI Error:",
             "Cloudflare Error:",
-            "GitHub Models Error:",
         ]
     )
 

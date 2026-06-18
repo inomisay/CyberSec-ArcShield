@@ -21,7 +21,6 @@ DEFAULT_GROQ_MODEL = "llama-3.1-8b-instant"
 DEFAULT_MISTRAL_MODEL = "mistral-small-latest"
 DEFAULT_OPENAI_MODEL = "gpt-5-mini"
 DEFAULT_CLOUDFLARE_MODEL = "@cf/qwen/qwen3-30b-a3b-fp8"
-DEFAULT_GITHUB_MODEL = "Phi-4"
 
 class ModelClient:
     """Base class for AI model clients."""
@@ -461,9 +460,22 @@ class OpenAIClient(ModelClient):
 class CloudflareClient(ModelClient):
     """Client for Cloudflare Workers AI (OpenAI-compatible endpoint)."""
 
-    def __init__(self, api_key=None, model_name=DEFAULT_CLOUDFLARE_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS):
-        self.api_key = api_key or os.getenv("CLOUDFLARE_API_TOKEN")
-        self.account_id = os.getenv("CLOUDFLARE_ACCOUNT_ID")
+    def __init__(
+        self,
+        api_key=None,
+        model_name=DEFAULT_CLOUDFLARE_MODEL,
+        temperature=DEFAULT_TEMPERATURE,
+        top_p=DEFAULT_TOP_P,
+        max_tokens=DEFAULT_MAX_TOKENS,
+        api_token_env="CLOUDFLARE_API_TOKEN",
+        account_id_env="CLOUDFLARE_ACCOUNT_ID",
+        profile_name="default",
+    ):
+        self.api_token_env = api_token_env
+        self.account_id_env = account_id_env
+        self.profile_name = profile_name
+        self.api_key = api_key or os.getenv(api_token_env)
+        self.account_id = os.getenv(account_id_env)
         self.model_name = model_name
         self.temperature = DEFAULT_TEMPERATURE
         self.top_p = DEFAULT_TOP_P
@@ -472,18 +484,18 @@ class CloudflareClient(ModelClient):
         key_status = "FOUND" if self.api_key else "NOT_FOUND"
         acct_status = "FOUND" if self.account_id else "NOT_FOUND"
         print(
-            f"[*] CloudflareClient initialized (Model: {model_name}, "
+            f"[*] CloudflareClient initialized (Profile: {profile_name}, Model: {model_name}, "
             f"Token: {key_status}, Account ID: {acct_status})"
         )
 
     def generate(self, prompt, system_prompt=None):
         if not self.api_key:
-            err = "Cloudflare Error: API token not found. Please add CLOUDFLARE_API_TOKEN to your .env file."
+            err = f"Cloudflare Error: API token not found. Please add {self.api_token_env} to your .env file."
             print(f"[!] {err}")
             return err
 
         if not self.account_id:
-            err = "Cloudflare Error: Account ID not found. Please add CLOUDFLARE_ACCOUNT_ID to your .env file."
+            err = f"Cloudflare Error: Account ID not found. Please add {self.account_id_env} to your .env file."
             print(f"[!] {err}")
             return err
 
@@ -561,110 +573,6 @@ class CloudflareClient(ModelClient):
         return "Cloudflare Error: Max retries exceeded (rate limit or transient API error)."
 
 
-class GitHubModelsClient(ModelClient):
-    """Client for GitHub Models API (OpenAI-compatible endpoint)."""
-
-    def __init__(self, api_key=None, model_name=DEFAULT_GITHUB_MODEL, temperature=DEFAULT_TEMPERATURE, top_p=DEFAULT_TOP_P, max_tokens=DEFAULT_MAX_TOKENS):
-        self.api_key = api_key or os.getenv("GITHUB_TOKEN") or os.getenv("GITHUB_MODELS_API_KEY")
-        self.model_name = model_name
-        self.temperature = DEFAULT_TEMPERATURE
-        self.top_p = DEFAULT_TOP_P
-        self.max_tokens = DEFAULT_MAX_TOKENS
-        self.url = "https://models.github.ai/inference/chat/completions"
-        key_status = "FOUND" if self.api_key else "NOT_FOUND"
-        print(f"[*] GitHubModelsClient initialized (Model: {model_name}, Token: {key_status})")
-
-    def generate(self, prompt, system_prompt=None):
-        if not self.api_key:
-            err = "GitHub Models Error: token not found. Please add GITHUB_TOKEN to your .env file."
-            print(f"[!] {err}")
-            return err
-
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "Content-Type": "application/json",
-        }
-
-        messages = []
-        if system_prompt:
-            messages.append({"role": "system", "content": system_prompt})
-        messages.append({"role": "user", "content": prompt})
-
-        data = {
-            "model": self.model_name,
-            "messages": messages,
-            "max_tokens": self.max_tokens,
-            "temperature": self.temperature,
-            "top_p": self.top_p,
-        }
-
-        max_retries = 8
-        for attempt in range(max_retries):
-            try:
-                print(f"[*] Sending request to GitHub Models ({self.model_name})...")
-                response = requests.post(self.url, json=data, headers=headers, timeout=180)
-
-                if response.status_code in {429, 500, 502, 503, 504}:
-                    try:
-                        error_msg = response.json().get("error", {}).get("message", "Unknown Error")
-                    except Exception:
-                        error_msg = response.text or "Unknown Error"
-                    retry_after = response.headers.get("Retry-After")
-                    wait = float(retry_after) if retry_after else min(180.0, 15.0 * (attempt + 1))
-                    if wait > 1800:
-                        print(
-                            f"[!] GitHub Models asked us to wait {wait:.1f}s. "
-                            "Stopping this request so the benchmark does not hang for hours."
-                        )
-                        return (
-                            "GitHub Models Error: Rate limit retry window is too long "
-                            f"({wait:.1f}s). Stop and rerun later or reduce request volume."
-                        )
-                    print(
-                        f"[!] GitHub Models retryable error ({response.status_code}): {error_msg}. "
-                        f"Waiting {wait:.1f}s before retry {attempt + 1}/{max_retries}..."
-                    )
-                    time.sleep(wait)
-                    continue
-
-                if response.status_code != 200:
-                    try:
-                        error_msg = response.json().get("error", {}).get("message", "Unknown Error")
-                    except Exception:
-                        error_msg = response.text or "Unknown Error"
-                    print(f"[!] GitHub Models API Error: {error_msg}")
-                    return f"GitHub Models Error: {error_msg}"
-
-                json_response = response.json()
-                choices = json_response.get("choices", [])
-                if choices and choices[0].get("message"):
-                    choice = choices[0]
-                    message = choice["message"]
-                    content = message.get("content") or message.get("reasoning_content") or ""
-                    if str(content).strip():
-                        return content
-                    finish_reason = choice.get("finish_reason") or "unknown"
-                    return (
-                        "GitHub Models Error: Response may have been filtered, spent on hidden "
-                        "reasoning, or blocked by provider policy. "
-                        f"Empty response content returned (finish_reason={finish_reason})."
-                    )
-                return "GitHub Models Error: No response content returned."
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as e:
-                wait = min(120.0, 10.0 * (attempt + 1))
-                print(
-                    f"[!] GitHub Models connection error ({type(e).__name__}): {e}. "
-                    f"Waiting {wait:.1f}s before retry {attempt + 1}/{max_retries}..."
-                )
-                time.sleep(wait)
-                continue
-            except Exception as e:
-                print(f"[!] GitHub Models Client Exception: {e}")
-                return f"GitHub Models Error: {e}"
-
-        return "GitHub Models Error: Max retries exceeded (rate limit or transient API error)."
-
-
 def get_client(provider, **kwargs):
     provider = provider.lower()
     if provider == "ollama":
@@ -679,8 +587,13 @@ def get_client(provider, **kwargs):
         return OpenAIClient(model_name=kwargs.get("model_name", DEFAULT_OPENAI_MODEL))
     elif provider == "cloudflare":
         return CloudflareClient(model_name=kwargs.get("model_name", DEFAULT_CLOUDFLARE_MODEL))
-    elif provider == "github":
-        return GitHubModelsClient(model_name=kwargs.get("model_name", DEFAULT_GITHUB_MODEL))
+    elif provider in {"cloudflare2", "cloudflare_alt", "cloudflare_gemma"}:
+        return CloudflareClient(
+            model_name=kwargs.get("model_name", DEFAULT_CLOUDFLARE_MODEL),
+            api_token_env="CLOUDFLARE_API_TOKEN_2",
+            account_id_env="CLOUDFLARE_ACCOUNT_ID_2",
+            profile_name="secondary",
+        )
     else:
         raise ValueError(f"Unknown provider: {provider}")
 

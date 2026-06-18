@@ -234,8 +234,6 @@ def infer_hosting_platform(section: str, model_variant: str, endpoint: str) -> s
         return "Groq"
     if model_variant.lower().startswith("cloudflare workers ai "):
         return "Cloudflare Workers AI"
-    if model_variant.lower().startswith("github models "):
-        return "GitHub Models"
     if "generativelanguage.googleapis.com" in endpoint_lower:
         return "Google AI Studio"
     if "api.openai.com" in endpoint_lower:
@@ -246,8 +244,6 @@ def infer_hosting_platform(section: str, model_variant: str, endpoint: str) -> s
         return "Groq"
     if "api.cloudflare.com" in endpoint_lower:
         return "Cloudflare Workers AI"
-    if "models.github.ai" in endpoint_lower:
-        return "GitHub Models"
     return "unknown"
 
 
@@ -265,8 +261,6 @@ def infer_execution_engine(endpoint: str) -> str:
         return "Groq OpenAI-compatible"
     if "api.cloudflare.com" in endpoint_lower:
         return "Cloudflare Workers AI"
-    if "models.github.ai" in endpoint_lower:
-        return "GitHub Models inference"
     if endpoint:
         return "HTTP API"
     return "unknown"
@@ -380,9 +374,6 @@ def parse_model_rows(source_path: Path, gpu_payload: dict, manifests: Dict[str, 
             elif lower_content.startswith("cloudflare workers ai "):
                 hosting_platform = "Cloudflare Workers AI"
                 model_variant = content[len("Cloudflare Workers AI "):].strip()
-            elif lower_content.startswith("github models "):
-                hosting_platform = "GitHub Models"
-                model_variant = content[len("GitHub Models "):].strip()
         else:
             continue
 

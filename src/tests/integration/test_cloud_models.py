@@ -44,8 +44,6 @@ DEFAULT_CLOUD_MODELS = [
     ("mistral", os.getenv("MISTRAL_MODEL", "mistral-small-latest")),
     ("groq", os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")),
     ("cloudflare", os.getenv("CLOUDFLARE_MODEL", "@cf/qwen/qwen3-30b-a3b-fp8")),
-    ("github", os.getenv("GITHUB_PHI_MODEL", "Phi-4")),
-    ("github", os.getenv("GITHUB_DEEPSEEK_MODEL", "DeepSeek-R1-0528")),
 ]
 DEFAULT_PROVIDER_BASES = {
     "openai": "https://api.openai.com",
@@ -54,13 +52,8 @@ DEFAULT_PROVIDER_BASES = {
     "mistral": "https://api.mistral.ai",
     "groq": "https://api.groq.com/openai",
     "cloudflare": "https://api.cloudflare.com",
-    "github": "https://models.github.ai/inference",
-    "gh": "https://models.github.ai/inference",
 }
-REQUEST_TIMEOUT_SECONDS = {
-    "github": int(os.getenv("GITHUB_MODELS_TIMEOUT", "180")),
-    "gh": int(os.getenv("GITHUB_MODELS_TIMEOUT", "180")),
-}
+REQUEST_TIMEOUT_SECONDS = {}
 PROJECT_ROOT = Path(__file__).resolve().parents[3]
 REPORT_DIR = PROJECT_ROOT / "output" / "model_availability"
 CSV_REPORT = REPORT_DIR / "cloud_model_responses.csv"
@@ -145,8 +138,6 @@ def _provider_api_key(provider: str):
         return os.getenv("GROQ_API_KEY")
     if provider == "cloudflare":
         return os.getenv("CLOUDFLARE_API_TOKEN") or os.getenv("CLOUDFLARE_API_KEY")
-    if provider in {"github", "gh"}:
-        return os.getenv("GITHUB_TOKEN") or os.getenv("GITHUB_MODELS_API_KEY")
     return os.getenv(f"{provider.upper()}_API_KEY") or CLOUD_API_KEY
 
 
@@ -263,15 +254,6 @@ def _provider_send_request(provider: str, model: str, prompt: str):
                 return "", f"{resp.status_code} {resp.reason}: {_response_error(resp)}", {}
             body = resp.json()
             return (_chat_completion_answer(body) or _chat_completion_answer(body.get("result", {})), "", body)
-
-        if provider in {"github", "gh"}:
-            url = api_base.rstrip("/") + "/chat/completions"
-            payload = {"model": model, "messages": [{"role": "user", "content": prompt}], "temperature": 0.0, "max_tokens": 128}
-            resp = requests.post(url, json=payload, headers=headers, timeout=timeout)
-            if resp.status_code != 200:
-                return "", f"{resp.status_code} {resp.reason}: {_response_error(resp)}", {}
-            body = resp.json()
-            return (_chat_completion_answer(body), "", body)
 
     except Exception as exc:
         return "", _sanitize_error(str(exc)), {}
