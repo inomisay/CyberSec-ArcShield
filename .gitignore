@@ -110,9 +110,8 @@ venv.bak/
 # Project specific
 logs/
 output/
-commands/
-!src/evaluation/commands/
-!src/evaluation/commands/*.txt
 dataset/Datasets.txt
 !logs/README.md
 provider_comparison_plots/
+src/evaluation/commands/cloud_models.txt
+src/evaluation/commands/local_ollama_models.txt

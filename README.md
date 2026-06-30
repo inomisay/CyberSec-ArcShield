@@ -17,12 +17,11 @@
 
 ## 🤖 Models & Providers Supported
 The suite is provider-agnostic, with command templates for the following evaluated models:
-- **OpenAI**: `gpt-5-mini`.
-- **Google Gemini**: `gemini-flash-lite-latest`, `gemma`.
+- **Google Gemini**: `gemini-flash-lite-latest`.
 - **Groq**: `llama-3.1-8b-instant`.
 - **Mistral AI**: `mistral-small-latest` (currently resolving to `mistral-small-2603`).
-- **Cloudflare Workers AI**: `@cf/qwen/qwen3-30b-a3b-fp8`, `@cf/deepseek-ai/deepseek-r1-distill-qwen-32b`, `@cf/google/gemma-3-12b-it`.
-- **Local (Ollama)**: `llama3.1:8b`, `qwen3:latest`, `deepseek-r1:latest`, `mistral:latest`, `gemma3:latest`.
+- **Cloudflare Workers AI**: `@cf/qwen/qwen3-30b-a3b-fp8`, `@cf/deepseek-ai/deepseek-r1-distill-qwen-32b`, `cloudflare2:@cf/google/gemma-4-26b-a4b-it`, `cloudflare2:@cf/moonshotai/kimi-k2.6`.
+- **Local (Ollama)**: `llama3.1:8b`, `qwen3:latest`, `deepseek-r1:latest`, `mistral:latest`, `gemma4:latest`.
 
 ## 📊 Strategic Analysis Tools
 ArcShield goes beyond simple ASR (Attack Success Rate) metrics to provide strategic security insights:
