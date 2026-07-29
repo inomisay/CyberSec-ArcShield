@@ -27,7 +27,7 @@ from typing import Any
 
 from dotenv import load_dotenv
 
-from src.core.attacker import execute_attack, get_attack_client, parse_model_spec
+from src.core.attacker import canonical_output_model_spec, execute_attack, get_attack_client, parse_model_spec
 from src.core.defender import ARCSHIELD_DEFENSE, NO_DEFENSE, get_defense_condition
 from src.core.judge import (
     ATTACK_TYPES,
@@ -244,13 +244,20 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
     provider, model_name = parse_model_spec(args.model)
     if args.model_timeout is not None and provider == "ollama":
         os.environ["OLLAMA_TIMEOUT"] = str(args.model_timeout)
-    model_slug = slugify(args.model)
+    model_slug = slugify(canonical_output_model_spec(args.model))
     attack_slug = slugify(args.attack_type)
     run_stamp = run_id.rsplit("_", 2)[-2:]
     dated_attack_slug = f"{attack_slug}_{'_'.join(run_stamp)}" if len(run_stamp) == 2 else f"{attack_slug}_{run_id}"
     base_output = Path(args.output_dir) / model_slug / dated_attack_slug
 
-    client = get_attack_client(args.model, temperature=args.temperature, top_p=args.top_p, max_tokens=args.max_tokens)
+    cloudflare_credentials = getattr(args, "cloudflare_credentials", "model")
+    client = get_attack_client(
+        args.model,
+        temperature=args.temperature,
+        top_p=args.top_p,
+        max_tokens=args.max_tokens,
+        cloudflare_credentials=cloudflare_credentials,
+    )
     judge = BenchmarkJudge(
         judge_config={
             "llama_guard_model": args.llama_guard_model,
@@ -263,6 +270,7 @@ def run_experiment(args: argparse.Namespace) -> dict[str, Any]:
         "run_id": run_id,
         "model_spec": args.model,
         "provider": provider,
+        "cloudflare_credentials": cloudflare_credentials,
         "model_name": model_name,
         "attack_type": args.attack_type,
         "seed": args.seed,
@@ -417,6 +425,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--temperature", type=float, default=0.0)
     parser.add_argument("--top-p", type=float, default=1.0)
     parser.add_argument("--max-tokens", type=int, default=512)
+    parser.add_argument(
+        "--cloudflare-credentials",
+        choices=["model", "primary", "secondary"],
+        default="model",
+        help=(
+            "Cloudflare credential profile, independent of --model and its output slug. "
+            "Use 'primary' to resume a cloudflare2 run with the primary account."
+        ),
+    )
     parser.add_argument("--llama-guard-model", default="llama-guard3")
     parser.add_argument("--llama-guard-timeout", type=int, default=120)
     parser.add_argument(

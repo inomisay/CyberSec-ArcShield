@@ -1,0 +1,149 @@
+record_type,dimension,value,available_n,sampled_n
+metadata,random_seed,20260712,70399,100
+metadata,sampling_method,proportional model-condition-outcome allocation with largest remainders; deterministic marginal-coverage repair,70399,100
+metadata,first_annotator_status,no completed first-annotator labels found; key fields left blank,0,0
+stratum_count,deployment,cloud,38400,55
+stratum_count,deployment,local,31999,45
+stratum_count,model_label,CLOUDFLARE DEEPSEEK,6400,8
+stratum_count,model_label,CLOUDFLARE GEMMA 4,6400,9
+stratum_count,model_label,CLOUDFLARE QWEN,6400,10
+stratum_count,model_label,GEMINI,6400,9
+stratum_count,model_label,GROQ LLAMA3.1,6400,10
+stratum_count,model_label,MISTRAL,6400,9
+stratum_count,model_label,OLLAMA DEEPSEEK R1,6400,9
+stratum_count,model_label,OLLAMA GEMMA 4,6400,8
+stratum_count,model_label,OLLAMA LLAMA3.1,6400,10
+stratum_count,model_label,OLLAMA MISTRAL,6400,9
+stratum_count,model_label,OLLAMA QWEN3,6399,9
+stratum_count,condition,arcshield,35200,48
+stratum_count,condition,no_defense,35199,52
+stratum_count,attack_type,Accidental Context Leakage,4400,8
+stratum_count,attack_type,Attention Shifting,4400,5
+stratum_count,attack_type,Code Injection,4400,5
+stratum_count,attack_type,Dictionary Attack,4400,8
+stratum_count,attack_type,Direct Exploitation,4400,6
+stratum_count,attack_type,Fill-in-the-Blank Attack,4400,6
+stratum_count,attack_type,Hypothetical Manipulation,4400,8
+stratum_count,attack_type,Indirect Injection,4400,5
+stratum_count,attack_type,Jailbreaks,4400,5
+stratum_count,attack_type,Logic Trap Attacks,4400,9
+stratum_count,attack_type,Multi-Language Attack,4400,6
+stratum_count,attack_type,Multi-Prompt Attack,4400,5
+stratum_count,attack_type,Obfuscation (Token Smuggling),4399,6
+stratum_count,attack_type,Payload Splitting,4400,6
+stratum_count,attack_type,Prompt Injection,4400,11
+stratum_count,attack_type,Role Playing / Pretending,4400,1
+stratum_count,outcome_class,ambiguous,13413,21
+stratum_count,outcome_class,failed_attack,23540,34
+stratum_count,outcome_class,partial_compliance,11841,17
+stratum_count,outcome_class,refusal,19388,27
+stratum_count,outcome_class,successful_jailbreak,2217,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|arcshield|ambiguous,1043,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|arcshield|failed_attack,853,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|arcshield|partial_compliance,750,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|arcshield|refusal,472,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|arcshield|successful_jailbreak,82,0
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|no_defense|ambiguous,458,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|no_defense|failed_attack,1239,2
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|no_defense|partial_compliance,870,1
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|no_defense|refusal,281,0
+stratum_count,stratum,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b|no_defense|successful_jailbreak,352,0
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|arcshield|ambiguous,793,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|arcshield|failed_attack,1166,2
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|arcshield|partial_compliance,455,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|arcshield|refusal,749,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|arcshield|successful_jailbreak,37,0
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|no_defense|ambiguous,895,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|no_defense|failed_attack,1040,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|no_defense|partial_compliance,537,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|no_defense|refusal,671,1
+stratum_count,stratum,cloudflare_cf_google_gemma_4_26b_a4b_it|no_defense|successful_jailbreak,57,0
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|arcshield|ambiguous,556,1
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|arcshield|failed_attack,861,1
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|arcshield|partial_compliance,434,1
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|arcshield|refusal,1323,2
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|arcshield|successful_jailbreak,26,0
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|no_defense|ambiguous,533,1
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|no_defense|failed_attack,1236,2
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|no_defense|partial_compliance,731,1
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|no_defense|refusal,554,1
+stratum_count,stratum,cloudflare_cf_qwen_qwen3_30b_a3b_fp8|no_defense|successful_jailbreak,146,0
+stratum_count,stratum,google_gemini_flash_lite_latest|arcshield|ambiguous,642,1
+stratum_count,stratum,google_gemini_flash_lite_latest|arcshield|failed_attack,1308,2
+stratum_count,stratum,google_gemini_flash_lite_latest|arcshield|partial_compliance,431,0
+stratum_count,stratum,google_gemini_flash_lite_latest|arcshield|refusal,764,1
+stratum_count,stratum,google_gemini_flash_lite_latest|arcshield|successful_jailbreak,55,0
+stratum_count,stratum,google_gemini_flash_lite_latest|no_defense|ambiguous,728,1
+stratum_count,stratum,google_gemini_flash_lite_latest|no_defense|failed_attack,1256,2
+stratum_count,stratum,google_gemini_flash_lite_latest|no_defense|partial_compliance,526,1
+stratum_count,stratum,google_gemini_flash_lite_latest|no_defense|refusal,565,1
+stratum_count,stratum,google_gemini_flash_lite_latest|no_defense|successful_jailbreak,125,0
+stratum_count,stratum,groq_llama_3_1_8b_instant|arcshield|ambiguous,491,1
+stratum_count,stratum,groq_llama_3_1_8b_instant|arcshield|failed_attack,890,1
+stratum_count,stratum,groq_llama_3_1_8b_instant|arcshield|partial_compliance,434,1
+stratum_count,stratum,groq_llama_3_1_8b_instant|arcshield|refusal,1353,2
+stratum_count,stratum,groq_llama_3_1_8b_instant|arcshield|successful_jailbreak,32,0
+stratum_count,stratum,groq_llama_3_1_8b_instant|no_defense|ambiguous,551,1
+stratum_count,stratum,groq_llama_3_1_8b_instant|no_defense|failed_attack,1336,2
+stratum_count,stratum,groq_llama_3_1_8b_instant|no_defense|partial_compliance,529,1
+stratum_count,stratum,groq_llama_3_1_8b_instant|no_defense|refusal,697,1
+stratum_count,stratum,groq_llama_3_1_8b_instant|no_defense|successful_jailbreak,87,0
+stratum_count,stratum,mistral_mistral_small_latest|arcshield|ambiguous,594,1
+stratum_count,stratum,mistral_mistral_small_latest|arcshield|failed_attack,995,1
+stratum_count,stratum,mistral_mistral_small_latest|arcshield|partial_compliance,438,1
+stratum_count,stratum,mistral_mistral_small_latest|arcshield|refusal,1134,1
+stratum_count,stratum,mistral_mistral_small_latest|arcshield|successful_jailbreak,39,0
+stratum_count,stratum,mistral_mistral_small_latest|no_defense|ambiguous,567,1
+stratum_count,stratum,mistral_mistral_small_latest|no_defense|failed_attack,1424,2
+stratum_count,stratum,mistral_mistral_small_latest|no_defense|partial_compliance,576,1
+stratum_count,stratum,mistral_mistral_small_latest|no_defense|refusal,447,1
+stratum_count,stratum,mistral_mistral_small_latest|no_defense|successful_jailbreak,186,0
+stratum_count,stratum,ollama_deepseek_r1_latest|arcshield|ambiguous,670,1
+stratum_count,stratum,ollama_deepseek_r1_latest|arcshield|failed_attack,502,1
+stratum_count,stratum,ollama_deepseek_r1_latest|arcshield|partial_compliance,394,0
+stratum_count,stratum,ollama_deepseek_r1_latest|arcshield|refusal,1624,2
+stratum_count,stratum,ollama_deepseek_r1_latest|arcshield|successful_jailbreak,10,0
+stratum_count,stratum,ollama_deepseek_r1_latest|no_defense|ambiguous,599,1
+stratum_count,stratum,ollama_deepseek_r1_latest|no_defense|failed_attack,1160,2
+stratum_count,stratum,ollama_deepseek_r1_latest|no_defense|partial_compliance,692,1
+stratum_count,stratum,ollama_deepseek_r1_latest|no_defense|refusal,638,1
+stratum_count,stratum,ollama_deepseek_r1_latest|no_defense|successful_jailbreak,111,0
+stratum_count,stratum,ollama_gemma4_latest|arcshield|ambiguous,640,1
+stratum_count,stratum,ollama_gemma4_latest|arcshield|failed_attack,1015,1
+stratum_count,stratum,ollama_gemma4_latest|arcshield|partial_compliance,423,0
+stratum_count,stratum,ollama_gemma4_latest|arcshield|refusal,1096,1
+stratum_count,stratum,ollama_gemma4_latest|arcshield|successful_jailbreak,26,0
+stratum_count,stratum,ollama_gemma4_latest|no_defense|ambiguous,693,1
+stratum_count,stratum,ollama_gemma4_latest|no_defense|failed_attack,1162,2
+stratum_count,stratum,ollama_gemma4_latest|no_defense|partial_compliance,567,1
+stratum_count,stratum,ollama_gemma4_latest|no_defense|refusal,699,1
+stratum_count,stratum,ollama_gemma4_latest|no_defense|successful_jailbreak,79,0
+stratum_count,stratum,ollama_llama3_1_8b|arcshield|ambiguous,475,1
+stratum_count,stratum,ollama_llama3_1_8b|arcshield|failed_attack,502,1
+stratum_count,stratum,ollama_llama3_1_8b|arcshield|partial_compliance,362,0
+stratum_count,stratum,ollama_llama3_1_8b|arcshield|refusal,1861,3
+stratum_count,stratum,ollama_llama3_1_8b|no_defense|ambiguous,588,1
+stratum_count,stratum,ollama_llama3_1_8b|no_defense|failed_attack,1159,2
+stratum_count,stratum,ollama_llama3_1_8b|no_defense|partial_compliance,433,1
+stratum_count,stratum,ollama_llama3_1_8b|no_defense|refusal,973,1
+stratum_count,stratum,ollama_llama3_1_8b|no_defense|successful_jailbreak,47,0
+stratum_count,stratum,ollama_mistral_latest|arcshield|ambiguous,588,1
+stratum_count,stratum,ollama_mistral_latest|arcshield|failed_attack,784,1
+stratum_count,stratum,ollama_mistral_latest|arcshield|partial_compliance,583,1
+stratum_count,stratum,ollama_mistral_latest|arcshield|refusal,1176,2
+stratum_count,stratum,ollama_mistral_latest|arcshield|successful_jailbreak,69,0
+stratum_count,stratum,ollama_mistral_latest|no_defense|ambiguous,254,0
+stratum_count,stratum,ollama_mistral_latest|no_defense|failed_attack,1637,2
+stratum_count,stratum,ollama_mistral_latest|no_defense|partial_compliance,694,1
+stratum_count,stratum,ollama_mistral_latest|no_defense|refusal,163,0
+stratum_count,stratum,ollama_mistral_latest|no_defense|successful_jailbreak,452,1
+stratum_count,stratum,ollama_qwen3_latest|arcshield|ambiguous,563,1
+stratum_count,stratum,ollama_qwen3_latest|arcshield|failed_attack,684,1
+stratum_count,stratum,ollama_qwen3_latest|arcshield|partial_compliance,365,0
+stratum_count,stratum,ollama_qwen3_latest|arcshield|refusal,1580,2
+stratum_count,stratum,ollama_qwen3_latest|arcshield|successful_jailbreak,8,0
+stratum_count,stratum,ollama_qwen3_latest|no_defense|ambiguous,492,1
+stratum_count,stratum,ollama_qwen3_latest|no_defense|failed_attack,1331,2
+stratum_count,stratum,ollama_qwen3_latest|no_defense|partial_compliance,617,1
+stratum_count,stratum,ollama_qwen3_latest|no_defense|refusal,568,1
+stratum_count,stratum,ollama_qwen3_latest|no_defense|successful_jailbreak,191,0

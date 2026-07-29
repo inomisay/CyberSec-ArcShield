@@ -1,0 +1,23 @@
+condition,model,model_label,is_pareto_frontier,attack_success_rate,latency_mean_ms,nondominated_objectives,nondominated_reason,dominates_models,dominated_by_example
+arcshield,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,False,0.2215625,40906.55429375,,,,OLLAMA LLAMA3.1
+arcshield,cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,False,0.145,15351.06996875,,,CLOUDFLARE DEEPSEEK;OLLAMA MISTRAL,CLOUDFLARE QWEN
+arcshield,cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,True,0.084375,7882.6971031250005,ASR=0.084375; latency_ms=7882.697,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",CLOUDFLARE DEEPSEEK;CLOUDFLARE GEMMA 4;OLLAMA GEMMA 4;OLLAMA MISTRAL,
+arcshield,google_gemini_flash_lite_latest,GEMINI,False,0.1821875,5377.71686875,,,CLOUDFLARE DEEPSEEK,GROQ LLAMA3.1
+arcshield,groq_llama_3_1_8b_instant,GROQ LLAMA3.1,True,0.128125,1187.33296875,ASR=0.128125; latency_ms=1187.333,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",CLOUDFLARE DEEPSEEK;CLOUDFLARE GEMMA 4;GEMINI;MISTRAL;OLLAMA GEMMA 4;OLLAMA MISTRAL,
+arcshield,mistral_mistral_small_latest,MISTRAL,False,0.1496875,1839.940765625,,,CLOUDFLARE DEEPSEEK;GEMINI;OLLAMA MISTRAL,GROQ LLAMA3.1
+arcshield,ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,False,0.0709375,20034.06788125,,,CLOUDFLARE DEEPSEEK;OLLAMA GEMMA 4;OLLAMA MISTRAL,OLLAMA QWEN3
+arcshield,ollama_gemma4_latest,OLLAMA GEMMA 4,False,0.13125,22592.470409375,,,CLOUDFLARE DEEPSEEK;OLLAMA MISTRAL,OLLAMA QWEN3
+arcshield,ollama_llama3_1_8b,OLLAMA LLAMA3.1,True,0.0459375,22640.2036125,ASR=0.045937; latency_ms=22640.204,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",CLOUDFLARE DEEPSEEK;OLLAMA MISTRAL,
+arcshield,ollama_mistral_latest,OLLAMA MISTRAL,False,0.154375,38685.08279375,,,CLOUDFLARE DEEPSEEK,OLLAMA LLAMA3.1
+arcshield,ollama_qwen3_latest,OLLAMA QWEN3,True,0.065625,19926.940940624998,ASR=0.065625; latency_ms=19926.941,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",CLOUDFLARE DEEPSEEK;OLLAMA DEEPSEEK R1;OLLAMA GEMMA 4;OLLAMA MISTRAL,
+no_defense,cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,False,0.390625,36587.28836875,,,OLLAMA MISTRAL,CLOUDFLARE GEMMA 4
+no_defense,cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,True,0.18,23041.003362500003,ASR=0.180000; latency_ms=23041.003,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",CLOUDFLARE DEEPSEEK;OLLAMA DEEPSEEK R1;OLLAMA GEMMA 4;OLLAMA MISTRAL;OLLAMA QWEN3,
+no_defense,cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,False,0.2771875,11658.7918625,,,CLOUDFLARE DEEPSEEK;OLLAMA MISTRAL;OLLAMA QWEN3,GROQ LLAMA3.1
+no_defense,google_gemini_flash_lite_latest,GEMINI,False,0.2621875,4544.48005,,,CLOUDFLARE DEEPSEEK;CLOUDFLARE QWEN;OLLAMA MISTRAL;OLLAMA QWEN3,GROQ LLAMA3.1
+no_defense,groq_llama_3_1_8b_instant,GROQ LLAMA3.1,True,0.2340625,1415.207390625,ASR=0.234063; latency_ms=1415.207,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",CLOUDFLARE DEEPSEEK;CLOUDFLARE QWEN;GEMINI;MISTRAL;OLLAMA DEEPSEEK R1;OLLAMA MISTRAL;OLLAMA QWEN3,
+no_defense,mistral_mistral_small_latest,MISTRAL,False,0.3046875,2606.240540625,,,CLOUDFLARE DEEPSEEK;OLLAMA MISTRAL,GROQ LLAMA3.1
+no_defense,ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,False,0.24125,47376.194321875,,,OLLAMA MISTRAL;OLLAMA QWEN3,OLLAMA LLAMA3.1
+no_defense,ollama_gemma4_latest,OLLAMA GEMMA 4,False,0.2015625,44028.721315625,,,OLLAMA DEEPSEEK R1;OLLAMA MISTRAL;OLLAMA QWEN3,OLLAMA LLAMA3.1
+no_defense,ollama_llama3_1_8b,OLLAMA LLAMA3.1,True,0.1665625,41532.589046875,ASR=0.166563; latency_ms=41532.589,"No evaluated model has both ASR and latency less than or equal to this model, with at least one strict improvement.",OLLAMA DEEPSEEK R1;OLLAMA GEMMA 4;OLLAMA MISTRAL;OLLAMA QWEN3,
+no_defense,ollama_mistral_latest,OLLAMA MISTRAL,False,0.418125,71255.262025,,,,OLLAMA LLAMA3.1
+no_defense,ollama_qwen3_latest,OLLAMA QWEN3,False,0.2859375,73587.88290625,,,,OLLAMA LLAMA3.1

@@ -50,6 +50,7 @@ DEFAULT_MODEL_MATRIX = [
     "mistral:mistral-small-latest",
     "groq:llama-3.1-8b-instant",
     "cloudflare:@cf/qwen/qwen3-30b-a3b-fp8",
+    "cloudflare:xai/grok-4.20-0309-non-reasoning",
     "ollama:llama3.1:8b",
     "ollama:qwen3:latest",
 ]

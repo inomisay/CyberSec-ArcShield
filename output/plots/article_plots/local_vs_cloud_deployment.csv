@@ -1,0 +1,23 @@
+model,model_label,condition,attack_success_rate,latency_mean_ms,deployment,condition_label
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,arcshield,0.2215625,40906.55429375,Cloud,ArcShield
+cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,arcshield,0.145,15351.06996875,Cloud,ArcShield
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,arcshield,0.084375,7882.697103125,Cloud,ArcShield
+google_gemini_flash_lite_latest,GEMINI,arcshield,0.1821875,5377.71686875,Cloud,ArcShield
+groq_llama_3_1_8b_instant,GROQ LLAMA3.1,arcshield,0.128125,1187.33296875,Cloud,ArcShield
+mistral_mistral_small_latest,MISTRAL,arcshield,0.1496875,1839.940765625,Cloud,ArcShield
+ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,arcshield,0.0709375,20034.06788125,Local,ArcShield
+ollama_gemma4_latest,OLLAMA GEMMA 4,arcshield,0.13125,22592.470409375,Local,ArcShield
+ollama_llama3_1_8b,OLLAMA LLAMA3.1,arcshield,0.0459375,22640.2036125,Local,ArcShield
+ollama_mistral_latest,OLLAMA MISTRAL,arcshield,0.154375,38685.08279375,Local,ArcShield
+ollama_qwen3_latest,OLLAMA QWEN3,arcshield,0.065625,19926.940940625,Local,ArcShield
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,no_defense,0.390625,36587.28836875,Cloud,No Defense
+cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,no_defense,0.18,23041.003362500003,Cloud,No Defense
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,no_defense,0.2771875,11658.7918625,Cloud,No Defense
+google_gemini_flash_lite_latest,GEMINI,no_defense,0.2621875,4544.48005,Cloud,No Defense
+groq_llama_3_1_8b_instant,GROQ LLAMA3.1,no_defense,0.2340625,1415.207390625,Cloud,No Defense
+mistral_mistral_small_latest,MISTRAL,no_defense,0.3046875,2606.240540625,Cloud,No Defense
+ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,no_defense,0.24125,47376.194321875,Local,No Defense
+ollama_gemma4_latest,OLLAMA GEMMA 4,no_defense,0.2015625,44028.721315625,Local,No Defense
+ollama_llama3_1_8b,OLLAMA LLAMA3.1,no_defense,0.1665625,41532.589046875,Local,No Defense
+ollama_mistral_latest,OLLAMA MISTRAL,no_defense,0.418125,71255.262025,Local,No Defense
+ollama_qwen3_latest,OLLAMA QWEN3,no_defense,0.2859375,73587.88290625,Local,No Defense

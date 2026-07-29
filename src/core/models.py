@@ -46,7 +46,7 @@ class OllamaClient(ModelClient):
         if configured is not None:
             return configured.strip().lower() in {"1", "true", "yes", "on"}
         lowered = str(model_name).lower()
-        if "qwen3" in lowered or "deepseek-r1" in lowered:
+        if "qwen3" in lowered or "deepseek-r1" in lowered or "gemma4" in lowered:
             return False
         return None
 
@@ -68,13 +68,33 @@ class OllamaClient(ModelClient):
         if self.think is not None:
             data["think"] = self.think
         
-        try:
-            response = requests.post(self.url, json=data, timeout=self.timeout)
-            response.raise_for_status()
-            result = response.json()
-            return result.get("response", "") or result.get("thinking", "")
-        except Exception as e:
-            return f"Ollama Error: {e}"
+        max_retries = int(os.getenv("OLLAMA_MAX_RETRIES", "2"))
+        last_empty = ""
+        for attempt in range(max_retries + 1):
+            try:
+                response = requests.post(self.url, json=data, timeout=self.timeout)
+                response.raise_for_status()
+                result = response.json()
+                answer = str(result.get("response", "") or "").strip()
+                if answer:
+                    return answer
+                last_empty = (
+                    f"empty response from Ollama "
+                    f"(done={result.get('done')}, done_reason={result.get('done_reason')}, "
+                    f"total_duration={result.get('total_duration')}, eval_count={result.get('eval_count')})"
+                )
+                if attempt < max_retries:
+                    time.sleep(2 + attempt)
+                    continue
+                thinking = str(result.get("thinking", "") or "").strip()
+                if thinking:
+                    return f"Ollama Error: {last_empty}; thinking field was returned without response content."
+                return f"Ollama Error: {last_empty}"
+            except Exception as e:
+                if attempt < max_retries:
+                    time.sleep(2 + attempt)
+                    continue
+                return f"Ollama Error: {e}"
 
 class GeminiClient(ModelClient):
     """Client for Google Gemini API."""
@@ -585,9 +605,21 @@ def get_client(provider, **kwargs):
         return MistralClient(model_name=kwargs.get("model_name", DEFAULT_MISTRAL_MODEL))
     elif provider == "openai":
         return OpenAIClient(model_name=kwargs.get("model_name", DEFAULT_OPENAI_MODEL))
-    elif provider == "cloudflare":
-        return CloudflareClient(model_name=kwargs.get("model_name", DEFAULT_CLOUDFLARE_MODEL))
-    elif provider in {"cloudflare2", "cloudflare_alt", "cloudflare_gemma"}:
+    elif provider in {"cloudflare", "cloudflare2", "cloudflare_alt", "cloudflare_gemma"}:
+        credential_profile = kwargs.get("cloudflare_credentials", "model")
+        if credential_profile not in {"model", "primary", "secondary"}:
+            raise ValueError(
+                "cloudflare_credentials must be one of: model, primary, secondary"
+            )
+        use_secondary = credential_profile == "secondary" or (
+            credential_profile == "model"
+            and provider in {"cloudflare2", "cloudflare_alt", "cloudflare_gemma"}
+        )
+        if not use_secondary:
+            return CloudflareClient(
+                model_name=kwargs.get("model_name", DEFAULT_CLOUDFLARE_MODEL),
+                profile_name="primary",
+            )
         return CloudflareClient(
             model_name=kwargs.get("model_name", DEFAULT_CLOUDFLARE_MODEL),
             api_token_env="CLOUDFLARE_API_TOKEN_2",

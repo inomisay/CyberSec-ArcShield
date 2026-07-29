@@ -44,6 +44,7 @@ DEFAULT_CLOUD_MODELS = [
     ("mistral", os.getenv("MISTRAL_MODEL", "mistral-small-latest")),
     ("groq", os.getenv("GROQ_MODEL", "llama-3.1-8b-instant")),
     ("cloudflare", os.getenv("CLOUDFLARE_MODEL", "@cf/qwen/qwen3-30b-a3b-fp8")),
+    ("cloudflare", os.getenv("CLOUDFLARE_GROK_MODEL", "xai/grok-4.20-0309-non-reasoning")),
 ]
 DEFAULT_PROVIDER_BASES = {
     "openai": "https://api.openai.com",

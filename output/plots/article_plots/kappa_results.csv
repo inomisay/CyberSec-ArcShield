@@ -1,0 +1,2 @@
+status,total_sample_size,paired_labeled_n,annotator_1_labeled_n,annotator_2_labeled_n,missing_annotator_1_n,missing_annotator_2_n,adjudication_performed,raw_percentage_agreement,cohens_kappa,kappa_ci95_low,kappa_ci95_high,confusion_matrix,class_specific_agreement,binary_agreement,multiclass_agreement,notes
+insufficient_annotations,100,0,0,0,100,100,false,,,,,,,,,"Both annotator label columns are empty; agreement statistics are undefined."

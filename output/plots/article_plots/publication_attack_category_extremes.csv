@@ -1,0 +1,13 @@
+condition,rank_type,rank,attack_type,asr,n
+arcshield,highest,1,Logic Trap Attacks,0.38,2200
+arcshield,highest,2,Hypothetical Manipulation,0.30772727272727274,2200
+arcshield,highest,3,Multi-Prompt Attack,0.2409090909090909,2200
+arcshield,lowest,1,Indirect Injection,0.024545454545454544,2200
+arcshield,lowest,2,Jailbreaks,0.02772727272727273,2200
+arcshield,lowest,3,Prompt Injection,0.030454545454545453,2200
+no_defense,highest,1,Logic Trap Attacks,0.6840909090909091,2200
+no_defense,highest,2,Hypothetical Manipulation,0.5781818181818181,2200
+no_defense,highest,3,Payload Splitting,0.5504545454545454,2200
+no_defense,lowest,1,Prompt Injection,0.055,2200
+no_defense,lowest,2,Fill-in-the-Blank Attack,0.0740909090909091,2200
+no_defense,lowest,3,Code Injection,0.09,2200

@@ -17,6 +17,15 @@ def parse_model_spec(model_spec):
     return provider.strip(), model_name.strip()
 
 
+def canonical_output_model_spec(model_spec):
+    """Keep Gemma output identity stable when Cloudflare credential profiles change."""
+    provider, model_name = parse_model_spec(model_spec)
+    cloudflare_aliases = {"cloudflare", "cloudflare2", "cloudflare_alt", "cloudflare_gemma"}
+    if provider.lower() in cloudflare_aliases and model_name == "@cf/google/gemma-4-26b-a4b-it":
+        return f"cloudflare:{model_name}"
+    return str(model_spec)
+
+
 def configure_client(client, temperature=None, top_p=None, max_tokens=None):
     """Apply deterministic generation settings where the client supports them."""
     if temperature is not None and hasattr(client, "temperature"):
@@ -30,10 +39,20 @@ def configure_client(client, temperature=None, top_p=None, max_tokens=None):
     return client
 
 
-def get_attack_client(model_spec="ollama:llama3.1:8b", temperature=0.0, top_p=1.0, max_tokens=512):
+def get_attack_client(
+    model_spec="ollama:llama3.1:8b",
+    temperature=0.0,
+    top_p=1.0,
+    max_tokens=512,
+    cloudflare_credentials="model",
+):
     """Create a model client for benchmark execution."""
     provider, model_name = parse_model_spec(model_spec)
-    client = get_client(provider, model_name=model_name)
+    client = get_client(
+        provider,
+        model_name=model_name,
+        cloudflare_credentials=cloudflare_credentials,
+    )
     return configure_client(client, temperature=temperature, top_p=top_p, max_tokens=max_tokens)
 
 

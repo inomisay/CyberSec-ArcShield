@@ -5,7 +5,7 @@
 # - ollama:qwen3:latest
 # - ollama:deepseek-r1:latest
 # - ollama:mistral:latest
-# - ollama:gemma3:latest
+# - ollama:gemma4:latest
 #
 # These are first-run commands for missing local runs. Cleanup flags such as
 # --resume and --retry-hard-cutoffs are intentionally omitted from first-run
@@ -42,7 +42,7 @@ Provider defaults:
 - Qwen3 MODEL_SPEC=ollama:qwen3:latest TOKENS=512 TIMEOUT=300
 - DeepSeek R1 MODEL_SPEC=ollama:deepseek-r1:latest TOKENS=512 TIMEOUT=300
 - Mistral MODEL_SPEC=ollama:mistral:latest TOKENS=512 TIMEOUT=300
-- Gemma 3 MODEL_SPEC=ollama:gemma3:latest TOKENS=512 TIMEOUT=300
+- Gemma 4 MODEL_SPEC=ollama:gemma4:latest TOKENS=512 TIMEOUT=300
 
 ====================
 RUN STATUS
@@ -60,46 +60,12 @@ ollama:mistral:latest
 ollama:deepseek-r1:latest
 - FINISHED
 
+ollama:gemma4:latest
+- FINISHED
+
 ====================
 AFTER A RUN IS INTERRUPTED
 ====================
 
 # Resume/repair pattern for an existing run:
 # python -m src.evaluation.run_attack_type_experiment --model <MODEL> --attack-type "<ATTACK_TYPE>" --condition both --run-id <RUN_ID> --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-
-
-python -m src.evaluation.run_benign_experiment --model ollama:deepseek-r1:latest --condition both --save-every 1 --max-tokens 512 --model-timeout 600
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Accidental Context Leakage" --condition no_defense --run-id single_attack_20260617_152229 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Attention Shifting" --condition no_defense --run-id single_attack_20260614_180002 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Code Injection" --condition no_defense --run-id single_attack_20260618_070215 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Dictionary Attack" --condition no_defense --run-id single_attack_20260618_130756 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Fill-in-the-Blank Attack" --condition no_defense --run-id single_attack_20260619_053803 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Hypothetical Manipulation" --condition both --run-id single_attack_20260615_163745 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Multi-Language Attack" --condition no_defense --run-id single_attack_20260619_165249 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:qwen3:latest --attack-type "Obfuscation (Token Smuggling)" --condition no_defense --run-id single_attack_20260608_060634 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 768
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Attention Shifting" --condition arcshield --run-id single_attack_20260616_110245 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Code Injection" --condition no_defense --run-id single_attack_20260619_133343 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Fill-in-the-Blank Attack" --condition no_defense --run-id single_attack_20260613_150153 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 400
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Fill-in-the-Blank Attack" --condition arcshield --run-id single_attack_20260613_150153 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Hypothetical Manipulation" --condition both --run-id single_attack_20260618_070707 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Indirect Injection" --condition no_defense --run-id single_attack_20260615_074626 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Logic Trap Attacks" --condition no_defense --run-id single_attack_20260617_153310 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-
-python -m src.evaluation.run_attack_type_experiment --model ollama:mistral:latest --attack-type "Role Playing / Pretending" --condition both --run-id single_attack_20260615_123941 --resume --retry-hard-cutoffs --save-every 1 --max-tokens 512
-

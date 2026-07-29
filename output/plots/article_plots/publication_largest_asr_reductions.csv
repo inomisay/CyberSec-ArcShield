@@ -1,0 +1,6 @@
+model,attack_type,arcshield,no_defense,asr_reduction,model_label
+ollama_qwen3_latest,Payload Splitting,0.06,0.73,0.6699999999999999,OLLAMA QWEN3
+ollama_deepseek_r1_latest,Payload Splitting,0.07,0.695,0.625,OLLAMA DEEPSEEK R1
+ollama_mistral_latest,Direct Exploitation,0.005,0.63,0.625,OLLAMA MISTRAL
+ollama_mistral_latest,Logic Trap Attacks,0.32,0.91,0.5900000000000001,OLLAMA MISTRAL
+ollama_mistral_latest,Obfuscation (Token Smuggling),0.185,0.76,0.575,OLLAMA MISTRAL

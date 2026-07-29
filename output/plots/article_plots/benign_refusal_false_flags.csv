@@ -1,0 +1,45 @@
+model,model_label,condition,condition_label,metric,rate,metric_label
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,arcshield,ArcShield,benign_refusal_rate,0.035,Benign refusal
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,no_defense,No Defense,benign_refusal_rate,0.03,Benign refusal
+cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,arcshield,ArcShield,benign_refusal_rate,0.0,Benign refusal
+cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,arcshield,ArcShield,benign_refusal_rate,0.005,Benign refusal
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,no_defense,No Defense,benign_refusal_rate,0.01,Benign refusal
+google_gemini_flash_lite_latest,GEMINI,arcshield,ArcShield,benign_refusal_rate,0.0,Benign refusal
+google_gemini_flash_lite_latest,GEMINI,no_defense,No Defense,benign_refusal_rate,0.005,Benign refusal
+groq_llama_3_1_8b_instant,GROQ LLAMA3.1,arcshield,ArcShield,benign_refusal_rate,0.03,Benign refusal
+groq_llama_3_1_8b_instant,GROQ LLAMA3.1,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+mistral_mistral_small_latest,MISTRAL,arcshield,ArcShield,benign_refusal_rate,0.0,Benign refusal
+mistral_mistral_small_latest,MISTRAL,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,arcshield,ArcShield,benign_refusal_rate,0.145,Benign refusal
+ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+ollama_gemma4_latest,OLLAMA GEMMA 4,arcshield,ArcShield,benign_refusal_rate,0.0,Benign refusal
+ollama_gemma4_latest,OLLAMA GEMMA 4,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+ollama_llama3_1_8b,OLLAMA LLAMA3.1,arcshield,ArcShield,benign_refusal_rate,0.0,Benign refusal
+ollama_llama3_1_8b,OLLAMA LLAMA3.1,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+ollama_mistral_latest,OLLAMA MISTRAL,arcshield,ArcShield,benign_refusal_rate,0.085,Benign refusal
+ollama_mistral_latest,OLLAMA MISTRAL,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+ollama_qwen3_latest,OLLAMA QWEN3,arcshield,ArcShield,benign_refusal_rate,0.0,Benign refusal
+ollama_qwen3_latest,OLLAMA QWEN3,no_defense,No Defense,benign_refusal_rate,0.0,Benign refusal
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,arcshield,ArcShield,harmful_false_flag_rate,0.23,False flag
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,CLOUDFLARE DEEPSEEK,no_defense,No Defense,harmful_false_flag_rate,0.225,False flag
+cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,arcshield,ArcShield,harmful_false_flag_rate,0.24,False flag
+cloudflare_cf_google_gemma_4_26b_a4b_it,CLOUDFLARE GEMMA 4,no_defense,No Defense,harmful_false_flag_rate,0.225,False flag
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,arcshield,ArcShield,harmful_false_flag_rate,0.165,False flag
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,CLOUDFLARE QWEN,no_defense,No Defense,harmful_false_flag_rate,0.17,False flag
+google_gemini_flash_lite_latest,GEMINI,arcshield,ArcShield,harmful_false_flag_rate,0.185,False flag
+google_gemini_flash_lite_latest,GEMINI,no_defense,No Defense,harmful_false_flag_rate,0.165,False flag
+groq_llama_3_1_8b_instant,GROQ LLAMA3.1,arcshield,ArcShield,harmful_false_flag_rate,0.2,False flag
+groq_llama_3_1_8b_instant,GROQ LLAMA3.1,no_defense,No Defense,harmful_false_flag_rate,0.19,False flag
+mistral_mistral_small_latest,MISTRAL,arcshield,ArcShield,harmful_false_flag_rate,0.21,False flag
+mistral_mistral_small_latest,MISTRAL,no_defense,No Defense,harmful_false_flag_rate,0.215,False flag
+ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,arcshield,ArcShield,harmful_false_flag_rate,0.44,False flag
+ollama_deepseek_r1_latest,OLLAMA DEEPSEEK R1,no_defense,No Defense,harmful_false_flag_rate,0.215,False flag
+ollama_gemma4_latest,OLLAMA GEMMA 4,arcshield,ArcShield,harmful_false_flag_rate,0.245,False flag
+ollama_gemma4_latest,OLLAMA GEMMA 4,no_defense,No Defense,harmful_false_flag_rate,0.265,False flag
+ollama_llama3_1_8b,OLLAMA LLAMA3.1,arcshield,ArcShield,harmful_false_flag_rate,0.18,False flag
+ollama_llama3_1_8b,OLLAMA LLAMA3.1,no_defense,No Defense,harmful_false_flag_rate,0.26,False flag
+ollama_mistral_latest,OLLAMA MISTRAL,arcshield,ArcShield,harmful_false_flag_rate,0.18,False flag
+ollama_mistral_latest,OLLAMA MISTRAL,no_defense,No Defense,harmful_false_flag_rate,0.205,False flag
+ollama_qwen3_latest,OLLAMA QWEN3,arcshield,ArcShield,harmful_false_flag_rate,0.12,False flag
+ollama_qwen3_latest,OLLAMA QWEN3,no_defense,No Defense,harmful_false_flag_rate,0.15,False flag

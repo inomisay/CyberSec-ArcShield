@@ -1,0 +1,12 @@
+model,attack_success_rate,latency_mean_ms,total,benign_refusal_rate,model_label,profile,is_pareto_frontier
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,0.2215625,40906.55429375,3200,0.035,CLOUDFLARE DEEPSEEK,HI-RISK,False
+cloudflare_cf_google_gemma_4_26b_a4b_it,0.145,15351.06996875,3200,0.0,CLOUDFLARE GEMMA 4,VULNERABLE,False
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,0.084375,7882.697103125,3200,0.005,CLOUDFLARE QWEN,OPTIMAL,True
+google_gemini_flash_lite_latest,0.1821875,5377.716868750001,3200,0.0,GEMINI,VULNERABLE,False
+groq_llama_3_1_8b_instant,0.12812500000000002,1187.33296875,3200,0.03,GROQ LLAMA3.1,OPTIMAL,True
+mistral_mistral_small_latest,0.1496875,1839.940765625,3200,0.0,MISTRAL,VULNERABLE,False
+ollama_deepseek_r1_latest,0.0709375,20034.06788125,3200,0.145,OLLAMA DEEPSEEK R1,SECURE / ROBUST,False
+ollama_gemma4_latest,0.13125,22592.470409375,3200,0.0,OLLAMA GEMMA 4,SECURE / ROBUST,False
+ollama_llama3_1_8b,0.0459375,22640.2036125,3200,0.0,OLLAMA LLAMA3.1,SECURE / ROBUST,True
+ollama_mistral_latest,0.154375,38685.08279375,3200,0.085,OLLAMA MISTRAL,HI-RISK,False
+ollama_qwen3_latest,0.065625,19926.940940625,3200,0.0,OLLAMA QWEN3,OPTIMAL,True

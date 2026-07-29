@@ -1,0 +1,353 @@
+model,attack_type,condition,n
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Accidental Context Leakage,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Accidental Context Leakage,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Attention Shifting,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Attention Shifting,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Code Injection,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Code Injection,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Dictionary Attack,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Dictionary Attack,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Direct Exploitation,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Direct Exploitation,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Fill-in-the-Blank Attack,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Fill-in-the-Blank Attack,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Hypothetical Manipulation,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Hypothetical Manipulation,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Indirect Injection,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Indirect Injection,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Jailbreaks,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Jailbreaks,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Logic Trap Attacks,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Logic Trap Attacks,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Multi-Language Attack,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Multi-Language Attack,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Multi-Prompt Attack,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Multi-Prompt Attack,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Obfuscation (Token Smuggling),arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Obfuscation (Token Smuggling),no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Payload Splitting,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Payload Splitting,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Prompt Injection,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Prompt Injection,no_defense,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Role Playing / Pretending,arcshield,200
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,Role Playing / Pretending,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Accidental Context Leakage,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Accidental Context Leakage,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Attention Shifting,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Attention Shifting,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Code Injection,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Code Injection,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Dictionary Attack,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Dictionary Attack,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Direct Exploitation,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Direct Exploitation,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Fill-in-the-Blank Attack,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Fill-in-the-Blank Attack,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Hypothetical Manipulation,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Hypothetical Manipulation,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Indirect Injection,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Indirect Injection,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Jailbreaks,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Jailbreaks,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Logic Trap Attacks,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Logic Trap Attacks,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Multi-Language Attack,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Multi-Language Attack,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Multi-Prompt Attack,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Multi-Prompt Attack,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Obfuscation (Token Smuggling),arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Obfuscation (Token Smuggling),no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Payload Splitting,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Payload Splitting,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Prompt Injection,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Prompt Injection,no_defense,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Role Playing / Pretending,arcshield,200
+cloudflare_cf_google_gemma_4_26b_a4b_it,Role Playing / Pretending,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Accidental Context Leakage,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Accidental Context Leakage,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Attention Shifting,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Attention Shifting,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Code Injection,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Code Injection,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Dictionary Attack,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Dictionary Attack,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Direct Exploitation,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Direct Exploitation,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Fill-in-the-Blank Attack,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Fill-in-the-Blank Attack,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Hypothetical Manipulation,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Hypothetical Manipulation,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Indirect Injection,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Indirect Injection,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Jailbreaks,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Jailbreaks,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Logic Trap Attacks,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Logic Trap Attacks,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Multi-Language Attack,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Multi-Language Attack,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Multi-Prompt Attack,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Multi-Prompt Attack,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Obfuscation (Token Smuggling),arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Obfuscation (Token Smuggling),no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Payload Splitting,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Payload Splitting,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Prompt Injection,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Prompt Injection,no_defense,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Role Playing / Pretending,arcshield,200
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,Role Playing / Pretending,no_defense,200
+google_gemini_flash_lite_latest,Accidental Context Leakage,arcshield,200
+google_gemini_flash_lite_latest,Accidental Context Leakage,no_defense,200
+google_gemini_flash_lite_latest,Attention Shifting,arcshield,200
+google_gemini_flash_lite_latest,Attention Shifting,no_defense,200
+google_gemini_flash_lite_latest,Code Injection,arcshield,200
+google_gemini_flash_lite_latest,Code Injection,no_defense,200
+google_gemini_flash_lite_latest,Dictionary Attack,arcshield,200
+google_gemini_flash_lite_latest,Dictionary Attack,no_defense,200
+google_gemini_flash_lite_latest,Direct Exploitation,arcshield,200
+google_gemini_flash_lite_latest,Direct Exploitation,no_defense,200
+google_gemini_flash_lite_latest,Fill-in-the-Blank Attack,arcshield,200
+google_gemini_flash_lite_latest,Fill-in-the-Blank Attack,no_defense,200
+google_gemini_flash_lite_latest,Hypothetical Manipulation,arcshield,200
+google_gemini_flash_lite_latest,Hypothetical Manipulation,no_defense,200
+google_gemini_flash_lite_latest,Indirect Injection,arcshield,200
+google_gemini_flash_lite_latest,Indirect Injection,no_defense,200
+google_gemini_flash_lite_latest,Jailbreaks,arcshield,200
+google_gemini_flash_lite_latest,Jailbreaks,no_defense,200
+google_gemini_flash_lite_latest,Logic Trap Attacks,arcshield,200
+google_gemini_flash_lite_latest,Logic Trap Attacks,no_defense,200
+google_gemini_flash_lite_latest,Multi-Language Attack,arcshield,200
+google_gemini_flash_lite_latest,Multi-Language Attack,no_defense,200
+google_gemini_flash_lite_latest,Multi-Prompt Attack,arcshield,200
+google_gemini_flash_lite_latest,Multi-Prompt Attack,no_defense,200
+google_gemini_flash_lite_latest,Obfuscation (Token Smuggling),arcshield,200
+google_gemini_flash_lite_latest,Obfuscation (Token Smuggling),no_defense,200
+google_gemini_flash_lite_latest,Payload Splitting,arcshield,200
+google_gemini_flash_lite_latest,Payload Splitting,no_defense,200
+google_gemini_flash_lite_latest,Prompt Injection,arcshield,200
+google_gemini_flash_lite_latest,Prompt Injection,no_defense,200
+google_gemini_flash_lite_latest,Role Playing / Pretending,arcshield,200
+google_gemini_flash_lite_latest,Role Playing / Pretending,no_defense,200
+groq_llama_3_1_8b_instant,Accidental Context Leakage,arcshield,200
+groq_llama_3_1_8b_instant,Accidental Context Leakage,no_defense,200
+groq_llama_3_1_8b_instant,Attention Shifting,arcshield,200
+groq_llama_3_1_8b_instant,Attention Shifting,no_defense,200
+groq_llama_3_1_8b_instant,Code Injection,arcshield,200
+groq_llama_3_1_8b_instant,Code Injection,no_defense,200
+groq_llama_3_1_8b_instant,Dictionary Attack,arcshield,200
+groq_llama_3_1_8b_instant,Dictionary Attack,no_defense,200
+groq_llama_3_1_8b_instant,Direct Exploitation,arcshield,200
+groq_llama_3_1_8b_instant,Direct Exploitation,no_defense,200
+groq_llama_3_1_8b_instant,Fill-in-the-Blank Attack,arcshield,200
+groq_llama_3_1_8b_instant,Fill-in-the-Blank Attack,no_defense,200
+groq_llama_3_1_8b_instant,Hypothetical Manipulation,arcshield,200
+groq_llama_3_1_8b_instant,Hypothetical Manipulation,no_defense,200
+groq_llama_3_1_8b_instant,Indirect Injection,arcshield,200
+groq_llama_3_1_8b_instant,Indirect Injection,no_defense,200
+groq_llama_3_1_8b_instant,Jailbreaks,arcshield,200
+groq_llama_3_1_8b_instant,Jailbreaks,no_defense,200
+groq_llama_3_1_8b_instant,Logic Trap Attacks,arcshield,200
+groq_llama_3_1_8b_instant,Logic Trap Attacks,no_defense,200
+groq_llama_3_1_8b_instant,Multi-Language Attack,arcshield,200
+groq_llama_3_1_8b_instant,Multi-Language Attack,no_defense,200
+groq_llama_3_1_8b_instant,Multi-Prompt Attack,arcshield,200
+groq_llama_3_1_8b_instant,Multi-Prompt Attack,no_defense,200
+groq_llama_3_1_8b_instant,Obfuscation (Token Smuggling),arcshield,200
+groq_llama_3_1_8b_instant,Obfuscation (Token Smuggling),no_defense,200
+groq_llama_3_1_8b_instant,Payload Splitting,arcshield,200
+groq_llama_3_1_8b_instant,Payload Splitting,no_defense,200
+groq_llama_3_1_8b_instant,Prompt Injection,arcshield,200
+groq_llama_3_1_8b_instant,Prompt Injection,no_defense,200
+groq_llama_3_1_8b_instant,Role Playing / Pretending,arcshield,200
+groq_llama_3_1_8b_instant,Role Playing / Pretending,no_defense,200
+mistral_mistral_small_latest,Accidental Context Leakage,arcshield,200
+mistral_mistral_small_latest,Accidental Context Leakage,no_defense,200
+mistral_mistral_small_latest,Attention Shifting,arcshield,200
+mistral_mistral_small_latest,Attention Shifting,no_defense,200
+mistral_mistral_small_latest,Code Injection,arcshield,200
+mistral_mistral_small_latest,Code Injection,no_defense,200
+mistral_mistral_small_latest,Dictionary Attack,arcshield,200
+mistral_mistral_small_latest,Dictionary Attack,no_defense,200
+mistral_mistral_small_latest,Direct Exploitation,arcshield,200
+mistral_mistral_small_latest,Direct Exploitation,no_defense,200
+mistral_mistral_small_latest,Fill-in-the-Blank Attack,arcshield,200
+mistral_mistral_small_latest,Fill-in-the-Blank Attack,no_defense,200
+mistral_mistral_small_latest,Hypothetical Manipulation,arcshield,200
+mistral_mistral_small_latest,Hypothetical Manipulation,no_defense,200
+mistral_mistral_small_latest,Indirect Injection,arcshield,200
+mistral_mistral_small_latest,Indirect Injection,no_defense,200
+mistral_mistral_small_latest,Jailbreaks,arcshield,200
+mistral_mistral_small_latest,Jailbreaks,no_defense,200
+mistral_mistral_small_latest,Logic Trap Attacks,arcshield,200
+mistral_mistral_small_latest,Logic Trap Attacks,no_defense,200
+mistral_mistral_small_latest,Multi-Language Attack,arcshield,200
+mistral_mistral_small_latest,Multi-Language Attack,no_defense,200
+mistral_mistral_small_latest,Multi-Prompt Attack,arcshield,200
+mistral_mistral_small_latest,Multi-Prompt Attack,no_defense,200
+mistral_mistral_small_latest,Obfuscation (Token Smuggling),arcshield,200
+mistral_mistral_small_latest,Obfuscation (Token Smuggling),no_defense,200
+mistral_mistral_small_latest,Payload Splitting,arcshield,200
+mistral_mistral_small_latest,Payload Splitting,no_defense,200
+mistral_mistral_small_latest,Prompt Injection,arcshield,200
+mistral_mistral_small_latest,Prompt Injection,no_defense,200
+mistral_mistral_small_latest,Role Playing / Pretending,arcshield,200
+mistral_mistral_small_latest,Role Playing / Pretending,no_defense,200
+ollama_deepseek_r1_latest,Accidental Context Leakage,arcshield,200
+ollama_deepseek_r1_latest,Accidental Context Leakage,no_defense,200
+ollama_deepseek_r1_latest,Attention Shifting,arcshield,200
+ollama_deepseek_r1_latest,Attention Shifting,no_defense,200
+ollama_deepseek_r1_latest,Code Injection,arcshield,200
+ollama_deepseek_r1_latest,Code Injection,no_defense,200
+ollama_deepseek_r1_latest,Dictionary Attack,arcshield,200
+ollama_deepseek_r1_latest,Dictionary Attack,no_defense,200
+ollama_deepseek_r1_latest,Direct Exploitation,arcshield,200
+ollama_deepseek_r1_latest,Direct Exploitation,no_defense,200
+ollama_deepseek_r1_latest,Fill-in-the-Blank Attack,arcshield,200
+ollama_deepseek_r1_latest,Fill-in-the-Blank Attack,no_defense,200
+ollama_deepseek_r1_latest,Hypothetical Manipulation,arcshield,200
+ollama_deepseek_r1_latest,Hypothetical Manipulation,no_defense,200
+ollama_deepseek_r1_latest,Indirect Injection,arcshield,200
+ollama_deepseek_r1_latest,Indirect Injection,no_defense,200
+ollama_deepseek_r1_latest,Jailbreaks,arcshield,200
+ollama_deepseek_r1_latest,Jailbreaks,no_defense,200
+ollama_deepseek_r1_latest,Logic Trap Attacks,arcshield,200
+ollama_deepseek_r1_latest,Logic Trap Attacks,no_defense,200
+ollama_deepseek_r1_latest,Multi-Language Attack,arcshield,200
+ollama_deepseek_r1_latest,Multi-Language Attack,no_defense,200
+ollama_deepseek_r1_latest,Multi-Prompt Attack,arcshield,200
+ollama_deepseek_r1_latest,Multi-Prompt Attack,no_defense,200
+ollama_deepseek_r1_latest,Obfuscation (Token Smuggling),arcshield,200
+ollama_deepseek_r1_latest,Obfuscation (Token Smuggling),no_defense,200
+ollama_deepseek_r1_latest,Payload Splitting,arcshield,200
+ollama_deepseek_r1_latest,Payload Splitting,no_defense,200
+ollama_deepseek_r1_latest,Prompt Injection,arcshield,200
+ollama_deepseek_r1_latest,Prompt Injection,no_defense,200
+ollama_deepseek_r1_latest,Role Playing / Pretending,arcshield,200
+ollama_deepseek_r1_latest,Role Playing / Pretending,no_defense,200
+ollama_gemma4_latest,Accidental Context Leakage,arcshield,200
+ollama_gemma4_latest,Accidental Context Leakage,no_defense,200
+ollama_gemma4_latest,Attention Shifting,arcshield,200
+ollama_gemma4_latest,Attention Shifting,no_defense,200
+ollama_gemma4_latest,Code Injection,arcshield,200
+ollama_gemma4_latest,Code Injection,no_defense,200
+ollama_gemma4_latest,Dictionary Attack,arcshield,200
+ollama_gemma4_latest,Dictionary Attack,no_defense,200
+ollama_gemma4_latest,Direct Exploitation,arcshield,200
+ollama_gemma4_latest,Direct Exploitation,no_defense,200
+ollama_gemma4_latest,Fill-in-the-Blank Attack,arcshield,200
+ollama_gemma4_latest,Fill-in-the-Blank Attack,no_defense,200
+ollama_gemma4_latest,Hypothetical Manipulation,arcshield,200
+ollama_gemma4_latest,Hypothetical Manipulation,no_defense,200
+ollama_gemma4_latest,Indirect Injection,arcshield,200
+ollama_gemma4_latest,Indirect Injection,no_defense,200
+ollama_gemma4_latest,Jailbreaks,arcshield,200
+ollama_gemma4_latest,Jailbreaks,no_defense,200
+ollama_gemma4_latest,Logic Trap Attacks,arcshield,200
+ollama_gemma4_latest,Logic Trap Attacks,no_defense,200
+ollama_gemma4_latest,Multi-Language Attack,arcshield,200
+ollama_gemma4_latest,Multi-Language Attack,no_defense,200
+ollama_gemma4_latest,Multi-Prompt Attack,arcshield,200
+ollama_gemma4_latest,Multi-Prompt Attack,no_defense,200
+ollama_gemma4_latest,Obfuscation (Token Smuggling),arcshield,200
+ollama_gemma4_latest,Obfuscation (Token Smuggling),no_defense,200
+ollama_gemma4_latest,Payload Splitting,arcshield,200
+ollama_gemma4_latest,Payload Splitting,no_defense,200
+ollama_gemma4_latest,Prompt Injection,arcshield,200
+ollama_gemma4_latest,Prompt Injection,no_defense,200
+ollama_gemma4_latest,Role Playing / Pretending,arcshield,200
+ollama_gemma4_latest,Role Playing / Pretending,no_defense,200
+ollama_llama3_1_8b,Accidental Context Leakage,arcshield,200
+ollama_llama3_1_8b,Accidental Context Leakage,no_defense,200
+ollama_llama3_1_8b,Attention Shifting,arcshield,200
+ollama_llama3_1_8b,Attention Shifting,no_defense,200
+ollama_llama3_1_8b,Code Injection,arcshield,200
+ollama_llama3_1_8b,Code Injection,no_defense,200
+ollama_llama3_1_8b,Dictionary Attack,arcshield,200
+ollama_llama3_1_8b,Dictionary Attack,no_defense,200
+ollama_llama3_1_8b,Direct Exploitation,arcshield,200
+ollama_llama3_1_8b,Direct Exploitation,no_defense,200
+ollama_llama3_1_8b,Fill-in-the-Blank Attack,arcshield,200
+ollama_llama3_1_8b,Fill-in-the-Blank Attack,no_defense,200
+ollama_llama3_1_8b,Hypothetical Manipulation,arcshield,200
+ollama_llama3_1_8b,Hypothetical Manipulation,no_defense,200
+ollama_llama3_1_8b,Indirect Injection,arcshield,200
+ollama_llama3_1_8b,Indirect Injection,no_defense,200
+ollama_llama3_1_8b,Jailbreaks,arcshield,200
+ollama_llama3_1_8b,Jailbreaks,no_defense,200
+ollama_llama3_1_8b,Logic Trap Attacks,arcshield,200
+ollama_llama3_1_8b,Logic Trap Attacks,no_defense,200
+ollama_llama3_1_8b,Multi-Language Attack,arcshield,200
+ollama_llama3_1_8b,Multi-Language Attack,no_defense,200
+ollama_llama3_1_8b,Multi-Prompt Attack,arcshield,200
+ollama_llama3_1_8b,Multi-Prompt Attack,no_defense,200
+ollama_llama3_1_8b,Obfuscation (Token Smuggling),arcshield,200
+ollama_llama3_1_8b,Obfuscation (Token Smuggling),no_defense,200
+ollama_llama3_1_8b,Payload Splitting,arcshield,200
+ollama_llama3_1_8b,Payload Splitting,no_defense,200
+ollama_llama3_1_8b,Prompt Injection,arcshield,200
+ollama_llama3_1_8b,Prompt Injection,no_defense,200
+ollama_llama3_1_8b,Role Playing / Pretending,arcshield,200
+ollama_llama3_1_8b,Role Playing / Pretending,no_defense,200
+ollama_mistral_latest,Accidental Context Leakage,arcshield,200
+ollama_mistral_latest,Accidental Context Leakage,no_defense,200
+ollama_mistral_latest,Attention Shifting,arcshield,200
+ollama_mistral_latest,Attention Shifting,no_defense,200
+ollama_mistral_latest,Code Injection,arcshield,200
+ollama_mistral_latest,Code Injection,no_defense,200
+ollama_mistral_latest,Dictionary Attack,arcshield,200
+ollama_mistral_latest,Dictionary Attack,no_defense,200
+ollama_mistral_latest,Direct Exploitation,arcshield,200
+ollama_mistral_latest,Direct Exploitation,no_defense,200
+ollama_mistral_latest,Fill-in-the-Blank Attack,arcshield,200
+ollama_mistral_latest,Fill-in-the-Blank Attack,no_defense,200
+ollama_mistral_latest,Hypothetical Manipulation,arcshield,200
+ollama_mistral_latest,Hypothetical Manipulation,no_defense,200
+ollama_mistral_latest,Indirect Injection,arcshield,200
+ollama_mistral_latest,Indirect Injection,no_defense,200
+ollama_mistral_latest,Jailbreaks,arcshield,200
+ollama_mistral_latest,Jailbreaks,no_defense,200
+ollama_mistral_latest,Logic Trap Attacks,arcshield,200
+ollama_mistral_latest,Logic Trap Attacks,no_defense,200
+ollama_mistral_latest,Multi-Language Attack,arcshield,200
+ollama_mistral_latest,Multi-Language Attack,no_defense,200
+ollama_mistral_latest,Multi-Prompt Attack,arcshield,200
+ollama_mistral_latest,Multi-Prompt Attack,no_defense,200
+ollama_mistral_latest,Obfuscation (Token Smuggling),arcshield,200
+ollama_mistral_latest,Obfuscation (Token Smuggling),no_defense,200
+ollama_mistral_latest,Payload Splitting,arcshield,200
+ollama_mistral_latest,Payload Splitting,no_defense,200
+ollama_mistral_latest,Prompt Injection,arcshield,200
+ollama_mistral_latest,Prompt Injection,no_defense,200
+ollama_mistral_latest,Role Playing / Pretending,arcshield,200
+ollama_mistral_latest,Role Playing / Pretending,no_defense,200
+ollama_qwen3_latest,Accidental Context Leakage,arcshield,200
+ollama_qwen3_latest,Accidental Context Leakage,no_defense,200
+ollama_qwen3_latest,Attention Shifting,arcshield,200
+ollama_qwen3_latest,Attention Shifting,no_defense,200
+ollama_qwen3_latest,Code Injection,arcshield,200
+ollama_qwen3_latest,Code Injection,no_defense,200
+ollama_qwen3_latest,Dictionary Attack,arcshield,200
+ollama_qwen3_latest,Dictionary Attack,no_defense,200
+ollama_qwen3_latest,Direct Exploitation,arcshield,200
+ollama_qwen3_latest,Direct Exploitation,no_defense,200
+ollama_qwen3_latest,Fill-in-the-Blank Attack,arcshield,200
+ollama_qwen3_latest,Fill-in-the-Blank Attack,no_defense,200
+ollama_qwen3_latest,Hypothetical Manipulation,arcshield,200
+ollama_qwen3_latest,Hypothetical Manipulation,no_defense,200
+ollama_qwen3_latest,Indirect Injection,arcshield,200
+ollama_qwen3_latest,Indirect Injection,no_defense,200
+ollama_qwen3_latest,Jailbreaks,arcshield,200
+ollama_qwen3_latest,Jailbreaks,no_defense,200
+ollama_qwen3_latest,Logic Trap Attacks,arcshield,200
+ollama_qwen3_latest,Logic Trap Attacks,no_defense,200
+ollama_qwen3_latest,Multi-Language Attack,arcshield,200
+ollama_qwen3_latest,Multi-Language Attack,no_defense,200
+ollama_qwen3_latest,Multi-Prompt Attack,arcshield,200
+ollama_qwen3_latest,Multi-Prompt Attack,no_defense,200
+ollama_qwen3_latest,Obfuscation (Token Smuggling),arcshield,200
+ollama_qwen3_latest,Obfuscation (Token Smuggling),no_defense,200
+ollama_qwen3_latest,Payload Splitting,arcshield,200
+ollama_qwen3_latest,Payload Splitting,no_defense,200
+ollama_qwen3_latest,Prompt Injection,arcshield,200
+ollama_qwen3_latest,Prompt Injection,no_defense,200
+ollama_qwen3_latest,Role Playing / Pretending,arcshield,200
+ollama_qwen3_latest,Role Playing / Pretending,no_defense,200

@@ -1,0 +1,23 @@
+model,condition,attack_success_rate,latency_mean_ms,total,model_label,condition_label
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,arcshield,0.2215625,40906.55429375,3200,CLOUDFLARE DEEPSEEK,ArcShield
+cloudflare_cf_deepseek_ai_deepseek_r1_distill_qwen_32b,no_defense,0.390625,36587.28836875,3200,CLOUDFLARE DEEPSEEK,No Defense
+cloudflare_cf_google_gemma_4_26b_a4b_it,arcshield,0.145,15351.06996875,3200,CLOUDFLARE GEMMA 4,ArcShield
+cloudflare_cf_google_gemma_4_26b_a4b_it,no_defense,0.18,23041.0033625,3200,CLOUDFLARE GEMMA 4,No Defense
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,arcshield,0.084375,7882.697103125,3200,CLOUDFLARE QWEN,ArcShield
+cloudflare_cf_qwen_qwen3_30b_a3b_fp8,no_defense,0.2771875,11658.7918625,3200,CLOUDFLARE QWEN,No Defense
+google_gemini_flash_lite_latest,arcshield,0.1821875,5377.716868750001,3200,GEMINI,ArcShield
+google_gemini_flash_lite_latest,no_defense,0.2621875,4544.48005,3200,GEMINI,No Defense
+groq_llama_3_1_8b_instant,arcshield,0.12812500000000002,1187.33296875,3200,GROQ LLAMA3.1,ArcShield
+groq_llama_3_1_8b_instant,no_defense,0.2340625,1415.207390625,3200,GROQ LLAMA3.1,No Defense
+mistral_mistral_small_latest,arcshield,0.1496875,1839.940765625,3200,MISTRAL,ArcShield
+mistral_mistral_small_latest,no_defense,0.3046875,2606.240540625,3200,MISTRAL,No Defense
+ollama_deepseek_r1_latest,arcshield,0.0709375,20034.06788125,3200,OLLAMA DEEPSEEK R1,ArcShield
+ollama_deepseek_r1_latest,no_defense,0.24125,47376.194321875,3200,OLLAMA DEEPSEEK R1,No Defense
+ollama_gemma4_latest,arcshield,0.13125,22592.470409375,3200,OLLAMA GEMMA 4,ArcShield
+ollama_gemma4_latest,no_defense,0.2015625,44028.721315625,3200,OLLAMA GEMMA 4,No Defense
+ollama_llama3_1_8b,arcshield,0.0459375,22640.2036125,3200,OLLAMA LLAMA3.1,ArcShield
+ollama_llama3_1_8b,no_defense,0.1665625,41532.589046875,3200,OLLAMA LLAMA3.1,No Defense
+ollama_mistral_latest,arcshield,0.154375,38685.08279375,3200,OLLAMA MISTRAL,ArcShield
+ollama_mistral_latest,no_defense,0.418125,71255.262025,3200,OLLAMA MISTRAL,No Defense
+ollama_qwen3_latest,arcshield,0.065625,19926.940940625,3200,OLLAMA QWEN3,ArcShield
+ollama_qwen3_latest,no_defense,0.2859375,73587.88290625,3200,OLLAMA QWEN3,No Defense

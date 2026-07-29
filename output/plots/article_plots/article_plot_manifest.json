@@ -1,0 +1,19 @@
+{
+  "status": "ok",
+  "attack_summary_rows": 352,
+  "benign_summary_rows": 22,
+  "figures": [
+    "overall_asr_ranked.png",
+    "asr_by_attack_category_no_defense.png",
+    "asr_by_attack_category_arcshield.png",
+    "refusal_rate_no_defense_by_model_and_attack.png",
+    "refusal_rate_arcshield_by_model_and_attack.png",
+    "arcshield_asr_reduction_heatmap.png",
+    "benign_refusal_false_flags.png",
+    "mean_latency_by_attack_type.png",
+    "security_efficiency_pareto_frontier.png",
+    "strategic_pareto_no_defense.png",
+    "strategic_pareto_arcshield.png",
+    "local_vs_cloud_deployment_comparison.png"
+  ]
+}

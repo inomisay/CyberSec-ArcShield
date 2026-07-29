@@ -9,6 +9,10 @@
 # - Groq: request-delay 2, max-tokens 512
 # - Cloudflare Qwen: request-delay 20, max-tokens 1024
 # - Cloudflare DeepSeek: request-delay 120, max-tokens 1024
+# - Cloudflare Gemma 4: use stable model prefix cloudflare2: with an explicit
+#   --cloudflare-credentials primary|secondary override. Both profiles write to
+#   the same canonical cloudflare_cf_google_gemma_4_26b_a4b_it model folder.
+# - Cloudflare Grok 4.20 non-reasoning: request-delay 2, max-tokens 512
 # - Cloudflare secondary account Kimi K2.6: use model prefix cloudflare2: request-delay 60, max-tokens 256 for the current partial run
 # - Mistral: request-delay 2, max-tokens 512
 #
@@ -38,6 +42,11 @@ python -m src.evaluation.run_attack_type_experiment --model MODEL_SPEC --attack-
 Resume existing run:
 python -m src.evaluation.run_attack_type_experiment --model MODEL_SPEC --attack-type "ATTACK TYPE" --condition both --run-id single_attack_YYYYMMDD_HHMMSS --resume --request-delay DELAY --save-every 1 --max-tokens TOKENS
 
+Resume a Gemma run with either Cloudflare account:
+Keep --model cloudflare2:@cf/google/gemma-4-26b-a4b-it unchanged and add
+--cloudflare-credentials primary or --cloudflare-credentials secondary.
+Never run the same attack/run ID from both accounts concurrently.
+
 Hard-cutoff cleanup only:
 python -m src.evaluation.run_attack_type_experiment --model MODEL_SPEC --attack-type "ATTACK TYPE" --condition both --run-id single_attack_YYYYMMDD_HHMMSS --resume --retry-hard-cutoffs --request-delay DELAY --save-every 1 --max-tokens TOKENS
 
@@ -47,6 +56,8 @@ Provider defaults:
 - Mistral MODEL_SPEC=mistral:mistral-small-latest DELAY=2 TOKENS=512
 - Cloudflare Qwen MODEL_SPEC=cloudflare:@cf/qwen/qwen3-30b-a3b-fp8 DELAY=20 TOKENS=1024
 - Cloudflare DeepSeek MODEL_SPEC=cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b DELAY=120 TOKENS=1024
+- Cloudflare Gemma 4 MODEL_SPEC=cloudflare2:@cf/google/gemma-4-26b-a4b-it CREDENTIALS=primary|secondary DELAY=20 TOKENS=1024
+- Cloudflare Grok MODEL_SPEC=cloudflare:xai/grok-4.20-0309-non-reasoning DELAY=2 TOKENS=512
 - Cloudflare account 2 Kimi K2.6 MODEL_SPEC=cloudflare2:@cf/moonshotai/kimi-k2.6 DELAY=20 TOKENS=768
 
 ====================
@@ -66,142 +77,19 @@ mistral:mistral-small-latest
 - FINISHED
 
 cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b
-- Benign exists: none
-- Existing attacks: none complete
-- Partial attacks: Direct Exploitation
-  - run_id: single_attack_20260606_105355
-- Missing attacks: Jailbreaks, Prompt Injection, Indirect Injection,
-  Role Playing / Pretending, Attention Shifting, Logic Trap Attacks,
-  Hypothetical Manipulation, Accidental Context Leakage, Code Injection,
-  Dictionary Attack, Fill-in-the-Blank Attack, Multi-Language Attack,
-  Multi-Prompt Attack, Obfuscation (Token Smuggling), Payload Splitting
+- FINISHED
 
 cloudflare2:@cf/google/gemma-4-26b-a4b-it
-- Not active: pilot produced no usable responses in this runner.
-
-cloudflare2:@cf/moonshotai/kimi-k2.6
-- Benign exists: none
-- Existing attacks: none
-- Partial attacks: Direct Exploitation
-  - run_id: single_attack_20260614_105815
-  - no_defense: 200/200 complete; arcshield: 55/200 saved; combined: stale/old 5 rows
-- Missing attacks: Jailbreaks, Prompt Injection, Indirect Injection,
-  Role Playing / Pretending, Attention Shifting, Logic Trap Attacks,
-  Hypothetical Manipulation, Accidental Context Leakage, Code Injection,
-  Dictionary Attack, Fill-in-the-Blank Attack, Multi-Language Attack,
-  Multi-Prompt Attack, Obfuscation (Token Smuggling), Payload Splitting
+- FINISHED
 
 https://dash.cloudflare.com/e36c8eb3b6aa6541941365bf91871262/workers/plans
 
 ====================
-BENIGN FIRST-RUN COMMANDS FOR MODELS WITHOUT BENIGN RESULTS
+CLOUDFLARE GEMMA 4 26B A4B REMAINING FIRST-RUN COMMANDS
 ====================
-
-Cloudflare DeepSeek R1 Distill Qwen 32B:
-python -m src.evaluation.run_benign_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Cloudflare2 Kimi K2.6:
-python -m src.evaluation.run_benign_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-====================
-CLOUDFLARE DEEPSEEK R1 DISTILL QWEN 32B FIRST-RUN ATTACK COMMANDS
-====================
-
-Direct Exploitation resume:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Direct Exploitation" --condition no_defense --run-id single_attack_20260606_105355 --resume --request-delay 120 --save-every 1 --max-tokens 1024
-
-Jailbreaks:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Jailbreaks" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Prompt Injection:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Prompt Injection" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Indirect Injection:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Indirect Injection" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Role Playing / Pretending:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Role Playing / Pretending" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Attention Shifting:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Attention Shifting" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Logic Trap Attacks:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Logic Trap Attacks" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Hypothetical Manipulation:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Hypothetical Manipulation" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Accidental Context Leakage:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Accidental Context Leakage" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Code Injection:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Code Injection" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Dictionary Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Dictionary Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Fill-in-the-Blank Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Fill-in-the-Blank Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
 
 Multi-Language Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Multi-Language Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Multi-Prompt Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Multi-Prompt Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Obfuscation (Token Smuggling):
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Obfuscation (Token Smuggling)" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-Payload Splitting:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare:@cf/deepseek-ai/deepseek-r1-distill-qwen-32b --attack-type "Payload Splitting" --condition both --request-delay 20 --save-every 1 --max-tokens 1024
-
-====================
-CLOUDFLARE2 KIMI K2.6 ATTACK COMMANDS
-====================
-hardx cut off :
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type direct_exploitation --condition both --max-tokens 1024 --resume --retry-truncated
-
-Prompt Injection:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Prompt Injection" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Indirect Injection:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Indirect Injection" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Role Playing / Pretending:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Role Playing / Pretending" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Attention Shifting:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Attention Shifting" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Logic Trap Attacks:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Logic Trap Attacks" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Hypothetical Manipulation:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Hypothetical Manipulation" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Accidental Context Leakage:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Accidental Context Leakage" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Code Injection:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Code Injection" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Dictionary Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Dictionary Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Fill-in-the-Blank Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Fill-in-the-Blank Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Multi-Language Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Multi-Language Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Multi-Prompt Attack:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Multi-Prompt Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Obfuscation (Token Smuggling):
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Obfuscation (Token Smuggling)" --condition both --request-delay 20 --save-every 1 --max-tokens 768
-
-Payload Splitting:
-python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/moonshotai/kimi-k2.6 --attack-type "Payload Splitting" --condition both --request-delay 20 --save-every 1 --max-tokens 768
+python -m src.evaluation.run_attack_type_experiment --model cloudflare2:@cf/google/gemma-4-26b-a4b-it --cloudflare-credentials primary --attack-type "Multi-Language Attack" --condition both --request-delay 20 --save-every 1 --max-tokens 1024 --run-id single_attack_20260728_081342 --resume
 
 ====================
 AFTER A RUN IS INTERRUPTED
