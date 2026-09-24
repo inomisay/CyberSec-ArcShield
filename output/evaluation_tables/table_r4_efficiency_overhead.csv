@@ -1,0 +1,12 @@
+Model,Deployment,Latency Refused (Mean / Med [IQR]),Latency Answered (Mean / Med [IQR]),Context Overhead (CO %),Token Overhead (TO %),Mean Compl. Tokens (nodef -> arc)
+Cloudflare DeepSeek Distill Qwen 32B,Cloud,34188 ms / 10456 ms (IQR: 7289),41391 ms / 22328 ms (IQR: 13001),+161.4%,+1.1%,586.3 -> 398.0
+Cloudflare Gemma 4 26B-A4B,Cloud,17580 ms / 7758 ms (IQR: 8457),20766 ms / 11759 ms (IQR: 7379),+161.4%,+46.5%,195.1 -> 146.2
+Cloudflare Qwen3 30B-A3B,Cloud,7808 ms / 6444 ms (IQR: 4917),11668 ms / 10526 ms (IQR: 8800),+161.4%,+11.9%,218.6 -> 63.2
+Gemini Flash-Lite,Cloud,3315 ms / 1613 ms (IQR: 1663),5958 ms / 2893 ms (IQR: 2295),+161.4%,+48.6%,148.0 -> 82.9
+Groq Llama 3.1 8B Instant,Cloud,1007 ms / 883 ms (IQR: 408),1563 ms / 1400 ms (IQR: 713),+161.4%,+60.4%,122.8 -> 74.3
+Mistral Small,Cloud,1407 ms / 1137 ms (IQR: 459),2756 ms / 2354 ms (IQR: 1735),+161.4%,+53.6%,118.9 -> 51.8
+Ollama DeepSeek R1,Local,18227 ms / 6438 ms (IQR: 17457),55453 ms / 50603 ms (IQR: 45792),+161.4%,+14.6%,205.8 -> 57.7
+Ollama Gemma 4,Local,18780 ms / 8380 ms (IQR: 12633),47464 ms / 27558 ms (IQR: 41320),+161.4%,+24.5%,195.1 -> 76.8
+Ollama Llama 3.1 8B,Local,17271 ms / 7958 ms (IQR: 13028),57775 ms / 43738 ms (IQR: 47783),+161.4%,+57.0%,104.6 -> 37.5
+Ollama Mistral 7B,Local,22283 ms / 8709 ms (IQR: 18217),71472 ms / 62154 ms (IQR: 66056),+161.4%,+34.3%,183.9 -> 92.6
+Ollama Qwen3,Local,19005 ms / 8900 ms (IQR: 16385),75277 ms / 55598 ms (IQR: 92021),+161.7%,+20.5%,165.3 -> 28.0

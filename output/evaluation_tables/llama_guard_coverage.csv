@@ -1,0 +1,13 @@
+Model,Deployment,Total Observations,Llama Guard Evaluated (N),Overall Coverage (%),Coverage (No Defense),Coverage (ArcShield)
+Cloudflare DeepSeek Distill Qwen 32B,Cloud,6400,6316,98.7%,98.4% (3150/3200),98.9% (3166/3200)
+Cloudflare Gemma 4 26B-A4B,Cloud,6400,6352,99.2%,99.0% (3169/3200),99.5% (3183/3200)
+Cloudflare Qwen3 30B-A3B,Cloud,6400,5740,89.7%,86.8% (2778/3200),92.6% (2962/3200)
+Gemini Flash-Lite,Cloud,6400,5799,90.6%,90.1% (2883/3200),91.1% (2916/3200)
+Groq Llama 3.1 8B Instant,Cloud,6400,5587,87.3%,85.0% (2719/3200),89.6% (2868/3200)
+Mistral Small,Cloud,6400,5519,86.2%,81.4% (2606/3200),91.0% (2913/3200)
+Ollama DeepSeek R1,Local,6400,6369,99.5%,99.4% (3181/3200),99.6% (3188/3200)
+Ollama Gemma 4,Local,6400,6394,99.9%,99.9% (3198/3200),99.9% (3196/3200)
+Ollama Llama 3.1 8B,Local,6400,6099,95.3%,94.0% (3009/3200),96.6% (3090/3200)
+Ollama Mistral 7B,Local,6400,6366,99.5%,99.6% (3186/3200),99.4% (3180/3200)
+Ollama Qwen3,Local,6399,6355,99.3%,99.1% (3169/3199),99.6% (3186/3200)
+**OVERALL BENCHMARK**,All Configurations,70399,66896,**95.0%**,93.9%,96.2%

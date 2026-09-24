@@ -109,7 +109,11 @@ venv.bak/
 
 # Project specific
 logs/
-output/
+output/*
+!output/human_validation/
+!output/evaluation_tables/
+output/plots/*
+!output/plots/article_plots/
 dataset/Datasets.txt
 !logs/README.md
 provider_comparison_plots/

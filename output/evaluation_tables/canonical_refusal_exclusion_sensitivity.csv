@@ -1,0 +1,13 @@
+Model,Deployment,N_Pairs,Standard ASR: NoDef -> Arc,Standard ΔASR (Rel. Red %),Non-Canonical ASR: NoDef -> Arc,Non-Canonical ΔASR (Rel. Red %),ArcShield ASR Shift (Δpp),Defense Persists?
+Cloudflare DeepSeek Distill Qwen 32B,Cloud,3200,39.1% -> 22.2%,+16.9 pp (43.3%),39.1% -> 22.2%,+16.9 pp (43.2%),+0.03 pp,YES
+Cloudflare Gemma 4 26B-A4B,Cloud,3200,18.0% -> 14.5%,+3.5 pp (19.4%),18.1% -> 14.5%,+3.6 pp (19.9%),+0.00 pp,YES
+Cloudflare Qwen3 30B-A3B,Cloud,3200,27.7% -> 8.4%,+19.3 pp (69.6%),27.8% -> 8.4%,+19.4 pp (69.7%),+0.00 pp,YES
+Gemini Flash-Lite,Cloud,3200,26.2% -> 18.2%,+8.0 pp (30.5%),26.3% -> 18.2%,+8.1 pp (30.7%),+0.00 pp,YES
+Groq Llama 3.1 8B Instant,Cloud,3200,23.4% -> 12.8%,+10.6 pp (45.3%),23.4% -> 12.8%,+10.6 pp (45.3%),+0.00 pp,YES
+Mistral Small,Cloud,3200,30.5% -> 15.0%,+15.5 pp (50.9%),30.5% -> 15.0%,+15.5 pp (50.8%),+0.06 pp,YES
+Ollama DeepSeek R1,Local,3200,24.1% -> 7.1%,+17.0 pp (70.6%),24.2% -> 7.1%,+17.1 pp (70.6%),+0.00 pp,YES
+Ollama Gemma 4,Local,3200,20.2% -> 13.1%,+7.0 pp (34.9%),20.2% -> 13.1%,+7.1 pp (35.0%),+0.00 pp,YES
+Ollama Llama 3.1 8B,Local,3200,16.7% -> 4.6%,+12.1 pp (72.4%),23.2% -> 4.6%,+18.7 pp (80.2%),+0.00 pp,YES
+Ollama Mistral 7B,Local,3200,41.8% -> 15.4%,+26.4 pp (63.1%),41.8% -> 15.4%,+26.4 pp (63.1%),+0.00 pp,YES
+Ollama Qwen3,Local,3199,28.6% -> 6.6%,+22.0 pp (77.1%),28.7% -> 6.6%,+22.1 pp (77.1%),+0.00 pp,YES
+**OVERALL BENCHMARK**,All Configurations,35199,26.9% -> 12.5%,+14.4 pp (53.4%),27.6% -> 12.5%,+15.0 pp (54.5%),+0.01 pp,**YES**

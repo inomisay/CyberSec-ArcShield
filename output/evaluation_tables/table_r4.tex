@@ -1,0 +1,13 @@
+\begin{tabular}{llllll}
+\toprule
+Model & Latency Refused (Mean / Med [IQR]) & Latency Answered (Mean / Med [IQR]) & Context Overhead (CO \%) & Token Overhead (TO \%) & Mean Compl. Tokens (nodef -> arc) \\
+\midrule
+DeepSeek-R1-Distill-32B & 353 ms / 341 ms (IQR: 97) & 1054 ms / 1046 ms (IQR: 203) & +78.4\% & -7.5\% & 197.4 -> 90.3 \\
+Gemini-Flash-Lite & 364 ms / 346 ms (IQR: 106) & 1013 ms / 997 ms (IQR: 218) & +76.7\% & -2.8\% & 180.2 -> 87.6 \\
+Llama-3.1-8B-Instant & 364 ms / 349 ms (IQR: 103) & 1011 ms / 1004 ms (IQR: 211) & +76.2\% & -5.5\% & 185.5 -> 84.9 \\
+Mistral-Small & 357 ms / 346 ms (IQR: 107) & 1027 ms / 1014 ms (IQR: 201) & +78.7\% & -7.9\% & 191.8 -> 83.9 \\
+Ollama-Llama-3.1-8B & 345 ms / 333 ms (IQR: 98) & 1044 ms / 1039 ms (IQR: 263) & +77.3\% & -10.0\% & 199.7 -> 83.9 \\
+Ollama-Mistral-7B & 351 ms / 332 ms (IQR: 103) & 1046 ms / 1033 ms (IQR: 234) & +77.7\% & -11.5\% & 208.5 -> 85.8 \\
+Ollama-Qwen-3 & 352 ms / 338 ms (IQR: 104) & 1035 ms / 1029 ms (IQR: 219) & +79.0\% & -7.9\% & 198.7 -> 88.9 \\
+\bottomrule
+\end{tabular}

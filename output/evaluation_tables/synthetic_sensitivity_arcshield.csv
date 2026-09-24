@@ -1,0 +1,17 @@
+Attack Category,N_Real,N_Synthetic,Synthetic %,Real ASR (arcshield),Synthetic ASR (arcshield),ΔASR (Syn - Real),Test,p-value
+Accidental Context Leakage,2200,0,0.0%,"7.1% [6.1%, 8.2%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Attention Shifting,2200,0,0.0%,"16.5% [15.1%, 18.2%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Code Injection,2200,0,0.0%,"3.8% [3.1%, 4.7%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Dictionary Attack,2013,187,8.5%,"9.4% [8.2%, 10.7%] (n=2013)","8.6% [5.3%, 13.4%] (n=187)",-0.8 pp,Chi-Square (df=1),0.8078 (ns)
+Direct Exploitation,2200,0,0.0%,"3.8% [3.1%, 4.7%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Fill-in-the-Blank Attack,2200,0,0.0%,"6.0% [5.1%, 7.1%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Hypothetical Manipulation,2200,0,0.0%,"30.8% [28.9%, 32.7%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Indirect Injection,2200,0,0.0%,"2.5% [1.9%, 3.2%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Jailbreaks,2200,0,0.0%,"2.8% [2.2%, 3.5%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Logic Trap Attacks,2200,0,0.0%,"38.0% [36.0%, 40.0%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Multi-Language Attack,2200,0,0.0%,"3.7% [3.0%, 4.6%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)
+Multi-Prompt Attack,561,1639,74.5%,"16.2% [13.4%, 19.5%] (n=561)","26.8% [24.7%, 29.0%] (n=1639)",+10.6 pp,Chi-Square (df=1),5.95e-07 ***
+Obfuscation (Token Smuggling),1386,814,37.0%,"16.2% [14.4%, 18.3%] (n=1386)","12.3% [10.2%, 14.7%] (n=814)",-3.9 pp,Chi-Square (df=1),0.0140 *
+Payload Splitting,869,1331,60.5%,"22.1% [19.5%, 25.0%] (n=869)","19.2% [17.1%, 21.4%] (n=1331)",-2.9 pp,Chi-Square (df=1),0.1055 (ns)
+Prompt Injection,1826,374,17.0%,"2.1% [1.6%, 2.9%] (n=1826)","7.5% [5.2%, 10.6%] (n=374)",+5.4 pp,Chi-Square (df=1),1.03e-07 ***
+Role Playing / Pretending,2200,0,0.0%,"14.0% [12.7%, 15.6%] (n=2200)",N/A (0),N/A,None,N/A (100% Real)

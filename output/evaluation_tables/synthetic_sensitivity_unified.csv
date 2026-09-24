@@ -1,0 +1,17 @@
+Attack Category,N (Real / Syn),Synthetic %,No Defense: Real ASR,No Defense: Syn ASR,No Defense: Δpp,No Defense: p-val,ArcShield: Real ASR,ArcShield: Syn ASR,ArcShield: Δpp,ArcShield: p-val
+Accidental Context Leakage,2200 / 0,0%,11.0%,N/A,-,-,7.1%,N/A,-,-
+Attention Shifting,2200 / 0,0%,38.3%,N/A,-,-,16.5%,N/A,-,-
+Code Injection,2200 / 0,0%,9.0%,N/A,-,-,3.8%,N/A,-,-
+Dictionary Attack,2013 / 187,8%,17.3%,25.1%,+7.8,0.0106 *,9.4%,8.6%,-0.8,0.8078 (ns)
+Direct Exploitation,2200 / 0,0%,21.9%,N/A,-,-,3.8%,N/A,-,-
+Fill-in-the-Blank Attack,2200 / 0,0%,7.4%,N/A,-,-,6.0%,N/A,-,-
+Hypothetical Manipulation,2200 / 0,0%,57.8%,N/A,-,-,30.8%,N/A,-,-
+Indirect Injection,2200 / 0,0%,14.4%,N/A,-,-,2.5%,N/A,-,-
+Jailbreaks,2200 / 0,0%,9.8%,N/A,-,-,2.8%,N/A,-,-
+Logic Trap Attacks,2200 / 0,0%,68.4%,N/A,-,-,38.0%,N/A,-,-
+Multi-Language Attack,2200 / 0,0%,16.5%,N/A,-,-,3.7%,N/A,-,-
+Multi-Prompt Attack,561 / 1639,74%,24.8%,40.2%,+15.4,7.50e-11 ***,16.2%,26.8%,+10.6,5.95e-07 ***
+Obfuscation (Token Smuggling),1386 / 813,37%,37.5%,43.1%,+5.5,0.0119 *,16.2%,12.3%,-3.9,0.0140 *
+Payload Splitting,869 / 1331,60%,51.7%,57.3%,+5.6,0.0114 *,22.1%,19.2%,-2.9,0.1055 (ns)
+Prompt Injection,1826 / 374,17%,3.8%,13.9%,+10.1,1.36e-14 ***,2.1%,7.5%,+5.4,1.03e-07 ***
+Role Playing / Pretending,2200 / 0,0%,22.0%,N/A,-,-,14.0%,N/A,-,-
