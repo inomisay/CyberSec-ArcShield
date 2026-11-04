@@ -6,8 +6,8 @@ Computes:
      distinguishing Local Intel Arc GPU runs (Ollama) from Cloud API endpoints.
   2. Publication-quality Seaborn/Matplotlib violin & boxplots of latency per model
      using a colorblind-friendly palette (e.g. viridis).
-  3. Correlation and stratified sensitivity analysis between token limits (max_tokens /
-     completion ceilings from 128 to 4000) and attack_successful.
+  3. Correlation and stratified sensitivity analysis between the configured token ceiling
+     (max_tokens, 128 to 4,080 in the article cohort) and attack_successful.
   4. Exports Markdown, CSV, and LaTeX tables.
 """
 
@@ -174,7 +174,12 @@ def load_dataset(results_dir: Path) -> pd.DataFrame:
                 "hardware": meta["hardware"],
                 "is_local": "Local" in meta["deployment"],
                 "condition": condition_from_row(row),
-                "is_benign": bool(row.get("is_benign") or row.get("attack_type") == "benign"),
+                # Benign rows carry prompt_kind="benign" and attack_type="Benign/<category>"
+                "is_benign": bool(
+                    row.get("is_benign")
+                    or str(row.get("prompt_kind") or "").lower() == "benign"
+                    or str(row.get("attack_type") or "").lower().startswith("benign")
+                ),
                 "attack_type": str(row.get("attack_type") or "Benign").strip(),
                 "attack_successful": bool(row.get("attack_success")),
                 "refusal_detected": bool(row.get("refusal_detected")),
@@ -309,12 +314,14 @@ def compute_token_ceiling_sensitivity(df: pd.DataFrame) -> Tuple[pd.DataFrame, D
     """Analyze correlation between token limits and attack success across token ceiling tiers."""
     attack_df = df[~df["is_benign"]].copy()
 
-    # Define standard token ceiling tiers spanning from 128 to 4000
-    bins = [0, 128, 256, 512, 1024, 2048, 4000]
-    labels = ["≤128", "129-256", "257-512", "513-1024", "1025-2048", "2049-4000"]
+    # Tiers are defined by the configured generation ceiling (max_tokens), not by the observed completion
+    # length: completion length is an outcome (refusals are short), so binning on it would confound the test.
+    # Configured ceilings in the article cohort range from 128 to 4,080 tokens.
+    bins = [0, 128, 256, 512, 1024, 2048, 4096]
+    labels = ["≤128", "129-256", "257-512", "513-1024", "1025-2048", "2049-4096"]
 
     attack_df["token_tier"] = pd.cut(
-        attack_df["completion_tokens"],
+        attack_df["max_tokens"],
         bins=bins,
         labels=labels,
         include_lowest=True,
@@ -373,8 +380,8 @@ def compute_token_ceiling_sensitivity(df: pd.DataFrame) -> Tuple[pd.DataFrame, D
 
     sensitivity_df = pd.DataFrame(rows)
 
-    # Compute correlation metrics across entire adversarial set
-    tokens_num = attack_df["completion_tokens"].to_numpy()
+    # Correlation between the configured token ceiling and attack success across the adversarial set
+    tokens_num = attack_df["max_tokens"].to_numpy()
     succ_num = attack_df["attack_successful"].to_numpy().astype(int)
 
     # Point-biserial and Spearman correlation
@@ -562,7 +569,7 @@ def export_markdown_report(
         "## 1. Executive Summary & Hardware Context\n",
         "- **Local Intel Arc GPU Configurations (5 models)**: Evaluated locally on an Intel Arc A770 GPU via Ollama. Shows expected higher compute/generation latency on local consumer hardware (Medians: ~6.4s - 8.9s for refused, ~27.5s - 62.2s for answered/reasoning generation).\n",
         "- **Cloud API Endpoints (6 models)**: Evaluated across Groq LPU, Cloudflare Workers AI serverless GPUs, Google TPU v5e, and Mistral AI. Demonstrates ultra-low latency on Groq (p50: ~1.4s) and Gemini Flash-Lite (p50: ~2.9s).\n",
-        "- **Token Limit Correlation**: Point-biserial correlation ($r_{pb}$) and Spearman rank correlation ($\rho$) between token counts (128 - 4000) and `attack_successful` confirm that ArcShield's risk reduction is uniform across all token ceiling tiers.\n",
+        "- **Token Limit Correlation**: Point-biserial correlation ($r_{pb}$) and Spearman rank correlation ($\rho$) between the configured token ceiling (max_tokens, 128 - 4080) and `attack_successful` on adversarial prompts; tiers are defined by max_tokens, not by observed completion length.\n",
         f"  - **Point-Biserial Correlation ($r_{{pb}}$)**: {corr_stats['point_biserial_r']:+.4f} ($p = {corr_stats['point_biserial_p']:.2e}$)\n",
         f"  - **Spearman Rank Correlation ($\\rho$)**: {corr_stats['spearman_rho']:+.4f} ($p = {corr_stats['spearman_p']:.2e}$)\n",
         f"  - **Mean Completion Tokens (Successful Attacks)**: {corr_stats['mean_completion_tokens_successful']:.1f} tokens\n",
@@ -629,7 +636,7 @@ def main() -> None:
     print("=" * 90 + "\n")
 
     print("\n" + "=" * 90)
-    print("  Table L2: Stratified Sensitivity Analysis across Token Ceiling Tiers (128 - 4000)")
+    print("  Table L2: Stratified Sensitivity Analysis across Token Ceiling Tiers (max_tokens, 128 - 4080)")
     print("=" * 90)
     print(sensitivity_df.to_string(index=False))
     print("=" * 90 + "\n")
@@ -668,7 +675,7 @@ def main() -> None:
         "",
         r"\begin{table*}[t]",
         r"\centering",
-        r"\caption{Stratified Sensitivity Analysis Across Token Ceiling Tiers (128 - 4000)}",
+        r"\caption{Stratified Sensitivity Analysis Across Token Ceiling Tiers (max\_tokens, 128 - 4080)}",
         sensitivity_df.to_latex(index=False, escape=True),
         r"\end{table*}",
     ]
